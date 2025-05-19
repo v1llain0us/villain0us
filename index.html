@@ -1,71 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Villain0.us</title>
+  <meta charset="UTF-8" />
+  <title>villain0.us // corrupted store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
-      background: black;
-      color: white;
-      font-family: monospace;
       margin: 0;
-      padding: 2rem;
-      text-align: center;
+      padding: 0;
+      background: black;
+      font-family: 'Courier New', monospace;
+      color: lime;
+      overflow-x: hidden;
+      animation: flickerBg 8s infinite;
     }
+
+    @keyframes flickerBg {
+      0%, 100% { background-color: black; }
+      20% { background-color: #0f0; }
+      40% { background-color: black; }
+      60% { background-color: #111; }
+      80% { background-color: #222; }
+    }
+
     h1 {
+      text-align: center;
       font-size: 3rem;
-      letter-spacing: 0.1em;
-      background: linear-gradient(to right, #f0f, #0ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: glitch 1.2s infinite;
+      letter-spacing: 0.2rem;
+      margin-top: 2rem;
+      animation: glitchText 1.2s infinite;
     }
-    a {
-      color: #0ff;
-      display: block;
-      margin: 1rem 0;
-      font-size: 1.2rem;
-      text-decoration: none;
+
+    @keyframes glitchText {
+      0% { text-shadow: 2px 2px red; }
+      25% { text-shadow: -2px -2px cyan; }
+      50% { text-shadow: 2px -2px lime; }
+      75% { text-shadow: -2px 2px magenta; }
+      100% { text-shadow: 2px 2px red; }
     }
-    .audio-wrapper {
-      margin: 2rem auto;
-      width: 100%;
-      max-width: 400px;
+
+    .store {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    audio {
-      width: 100%;
-      outline: none;
+
+    .item {
+      border: 2px dashed lime;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
+      animation: noise 0.3s infinite;
     }
-    @keyframes glitch {
-      0% { text-shadow: 2px 2px #f00; }
-      50% { text-shadow: -2px -1px #0ff; }
-      100% { text-shadow: 1px 2px #f0f; }
+
+    .item:hover {
+      background: #0f0;
+      color: black;
+    }
+
+    .item h2 {
+      margin-top: 0;
+    }
+
+    @keyframes noise {
+      0%, 100% { transform: skewX(0); }
+      50% { transform: skewX(1.5deg); }
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: 3rem;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <h1>villain0.us</h1>
-  <p>welcome to the base layer of the brand.<br> glitch gospel / audio artifact / tokyo occult signal</p>
-
-  <div class="audio-wrapper">
-    <p>OLLIE</p>
-    <audio controls autoplay>
-      <source src="https://0x.villain0.us/zerocross%20-%20ollie%20(mixed).mp3" type="audio/mpeg">
-    </audio>
+  <h1>VILLAIN0.US // STORE</h1>
+  <div class="store">
+    <div class="item">
+      <h2>OLLIE - MP3</h2>
+      <audio controls autoplay>
+        <source src="https://0x.villain0.us/zerocross%20-%20ollie%20(mixed).mp3" type="audio/mpeg">
+      </audio>
+      <p>¥666 - corrupted audio artifact</p>
+    </div>
+    <div class="item">
+      <h2>HEAVEN & EARTH - MP3</h2>
+      <audio controls autoplay>
+        <source src="https://0x.villain0.us/heavenearth%20(mixed).mp3" type="audio/mpeg">
+      </audio>
+      <p>¥666 - synth exorcism download</p>
+    </div>
+    <div class="item">
+      <h2>INCREDIBLE - MP3</h2>
+      <audio controls autoplay>
+        <source src="https://0x.villain0.us/zero%20cross%20-%20incredible%20(mixed).mp3" type="audio/mpeg">
+      </audio>
+      <p>¥666 - illegal audio relic</p>
+    </div>
   </div>
-
-  <div class="audio-wrapper">
-    <p>HEAVEN & EARTH</p>
-    <audio controls autoplay>
-      <source src="https://0x.villain0.us/heavenearth%20(mixed).mp3" type="audio/mpeg">
-    </audio>
-  </div>
-
-  <div class="audio-wrapper">
-    <p>INCREDIBLE</p>
-    <audio controls autoplay>
-      <source src="https://0x.villain0.us/zero%20cross%20-%20incredible%20(mixed).mp3" type="audio/mpeg">
-    </audio>
+  <div class="footer">
+    <p>&copy; 2024 VILLAIN0.US — Tokyo / Chaos Engine</p>
   </div>
 </body>
 </html>

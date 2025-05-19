@@ -1,95 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Villainous Brand // Tokyo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:#000;color:#fff;font-family:'Press Start 2P',monospace;overflow-x:hidden}
-
-    /* pixel noise */
-    body::before{content:"";position:fixed;inset:0;z-index:0;background:repeating-linear-gradient(45deg,#000 0 50px,#0f0 51px,#f0f 52px,#0ff 53px,#000 54px);opacity:.12;animation:bgShift 2s steps(2) infinite}
-    @keyframes bgShift{50%{transform:translate(4px,4px)}}
-
-    a{color:#0ff;text-decoration:none}
-    .wrapper{position:relative;z-index:1;padding:0 1rem}
-
-    /* TITLE */
-    .title-row{display:flex;justify-content:space-between;align-items:flex-start;padding:6vh 2vw 2vh;font-size:8vw;text-shadow:0 0 6px #f0f,0 0 14px #0ff;animation:textGlitch 1.2s infinite alternate}
-    .title-left{text-align:left;line-height:.9em}
-    .title-right{text-align:right;line-height:.9em}
-    .huge-now{font-size:18vw;line-height:.8em;text-align:center;margin:0 auto -2vh;animation:textGlitch 1.2s infinite alternate}
-    @keyframes textGlitch{0%{text-shadow:2px 2px #0ff}33%{text-shadow:-3px 1px #f0f}66%{text-shadow:1px -3px #0f0}100%{text-shadow:-2px 2px #ff0}}
-
-    /* PRODUCT GRID */
-    .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:3rem;padding:4rem 0}
-    .product{position:relative;border:3px dashed #0ff;padding:1rem;text-align:center;cursor:pointer;transition:transform .2s}
-    .product:hover{transform:scale(1.05)}
-    .product img{max-width:100%;border:2px solid #f0f}
-    .product h3{margin:.5rem 0;transition:.2s}
-    .product:hover h3{font-size:2.2rem}
-
-    /* info boxes */
-    .info-wrap{display:flex;flex-wrap:wrap;justify-content:center;gap:2rem;padding-bottom:3rem}
-    .info{flex:1 1 280px;max-width:480px;padding:2rem;border:4px solid;font-size:1.6rem;text-align:center;font-style:italic;line-height:1.2em;letter-spacing:-1px}
-    .green{color:#0f0;border-color:#0f0;flex:2 1 440px}
-    .pink{color:#f0f;border-color:#f0f;white-space:pre-wrap}
-
-    /* about */
-    .about{border-top:2px solid #0ff;margin:4rem auto 6rem;text-align:center;font-size:1.3rem;max-width:850px;padding-top:2rem;color:#0ff;font-style:italic}
-
-    footer{text-align:center;color:#aaa;font-size:.75rem;padding-bottom:2rem}
-
-    @media(max-width:600px){.title-row{font-size:12vw}.huge-now{font-size:30vw}.info{font-size:5vw}}
-  </style>
+<meta charset="UTF-8">
+<title>Villainous Brand // Tokyo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<meta property="og:title" content="Villainous Brand — Tokyo Underground Fashion" />
+<meta property="og:description" content="Glitch gospel & cyber‑punk streetwear drops. Join the villain club." />
+<meta property="og:image" content="https://villain0.us/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.css" />
+<style>
+ @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+ *{box-sizing:border-box}
+ html,body{margin:0;padding:0;background:#000;color:#fff;font-family:'Press Start 2P',monospace;overflow-x:hidden}
+ body::before{content:"";position:fixed;inset:0;z-index:0;background:repeating-linear-gradient(45deg,#000 0 50px,#0f0 51px,#f0f 52px,#0ff 53px,#000 54px);opacity:.12;animation:bgShift 2s steps(2) infinite}
+ @keyframes bgShift{50%{transform:translate(4px,4px)}}
+ a{color:#0ff;text-decoration:none}
+ .wrapper{position:relative;z-index:1;padding:0 1rem}
+ /* TITLE STACK */
+ .title-stack{padding-top:8vh;text-align:center;font-size:9vw;line-height:.9em;text-shadow:0 0 6px #f0f,0 0 14px #0ff;animation:textGlitch 1.2s infinite alternate}
+ .huge-now{font-size:18vw;line-height:.8em;text-align:center;margin-top:-1vh;text-shadow:0 0 6px #f0f,0 0 14px #0ff;animation:textGlitch 1.2s infinite alternate}
+ @keyframes textGlitch{0%{text-shadow:2px 2px #0ff}33%{text-shadow:-3px 1px #f0f}66%{text-shadow:1px -3px #0f0}100%{text-shadow:-2px 2px #ff0}}
+ /* PRODUCT GRID */
+ .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:3rem;padding:4rem 0}
+ .product{border:3px dashed #0ff;padding:1rem;text-align:center;cursor:pointer;transition:transform .2s;position:relative}
+ .product:hover{transform:scale(1.05)}
+ .product img{max-width:100%;border:2px solid #f0f}
+ .buy{margin-top:1rem;border:2px solid #0ff;background:transparent;color:#0ff;padding:.5rem 1rem;font-size:1rem;cursor:pointer;transition:.2s}
+ .buy:hover{background:#0ff;color:#000}
+ /* INFO */
+ .info-wrap{display:flex;flex-wrap:wrap;justify-content:center;gap:2rem;padding-bottom:3rem}
+ .info{flex:1 1 280px;max-width:480px;padding:2rem;border:4px solid;font-size:clamp(22px,5vw,42px);text-align:center;font-style:italic}
+ .green{color:#0f0;border-color:#0f0;flex:2 1 480px}
+ .pink{color:#f0f;border-color:#f0f}
+ /* ABOUT */
+ .about{border-top:2px solid #0ff;margin:4rem auto 6rem;text-align:center;font-size:1.4rem;max-width:850px;padding-top:2rem;color:#0ff;font-style:italic}
+ footer{text-align:center;color:#aaa;font-size:.75rem;padding-bottom:2rem}
+ @media(max-width:600px){.title-stack{font-size:14vw}.huge-now{font-size:32vw}}
+</style>
 </head>
 <body>
-  <audio id="bgTrack" src="https://0x.villain0.us/heavenearth%20(mixed).mp3"></audio>
-  <div class="wrapper">
-    <!-- TITLE -->
-    <div class="title-row">
-      <div class="title-left">YOUR<br>VILLAIN</div>
-      <div class="title-right">ARC<br>STARTS</div>
-    </div>
-    <div class="huge-now">NOW</div>
+<!-- Snipcart -->
+<div hidden id="snipcart" data-api-key="YOUR_PUBLIC_API_KEY" data-currency="JPY"></div>
+<script async src="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.js"></script>
+<audio id="bgTrack" src="https://0x.villain0.us/heavenearth%20(mixed).mp3"></audio>
+<div class="wrapper">
+  <div class="title-stack">YOUR VILLAIN<br>ARC STARTS</div>
+  <div class="huge-now">NOW</div>
 
-    <!-- PRODUCTS -->
-    <section class="product-grid">
-      <div class="product" data-label="HAT"><h3>TACOS</h3><img src="image.png" alt="Hat"><p>¥666</p></div>
-      <div class="product" data-label="SHIRT"><h3>VILLAIN</h3><img src="image2.png" alt="Shirt"><p>¥666</p></div>
-      <div class="product" data-label="SHIRT"><h3>RAPTURE</h3><img src="image3.png" alt="Hoodie"><p>¥666</p></div>
-    </section>
+  <section class="product-grid">
+    <div class="product" data-label="HAT"><h3>TACOS</h3><img src="image.png" alt="Hat"><button class="buy snipcart-add-item" data-item-id="tacos-hat" data-item-price="666" data-item-url="https://villain0.us" data-item-image="image.png" data-item-name="HAT">BUY</button></div>
+    <div class="product" data-label="SHIRT"><h3>VILLAIN</h3><img src="image2.png" alt="Shirt"><button class="buy snipcart-add-item" data-item-id="villain-shirt" data-item-price="666" data-item-url="https://villain0.us" data-item-image="image2.png" data-item-name="SHIRT">BUY</button></div>
+    <div class="product" data-label="SHIRT"><h3>RAPTURE</h3><img src="image3.png" alt="Rapture"><button class="buy snipcart-add-item" data-item-id="rapture-shirt" data-item-price="666" data-item-url="https://villain0.us" data-item-image="image3.png" data-item-name="SHIRT">BUY</button></div>
+  </section>
 
-    <!-- INFO BOXES -->
-    <div class="info-wrap">
-      <div class="info green">FREE STICKERS<br>WITH EVERY ORDER</div>
-      <div class="info pink">🤘💀🤖🧷👾
-JOIN THE VILLAIN CLUB
-SIGN UP 4 UPDATES
-👁️‍🗨️🕸️☠️🧨🦾</div>
-    </div>
-
-    <!-- ABOUT -->
-    <div class="about">Born in Tokyo & brewed in chaos. We fuse cyberpunk signal flow, street‑zine aesthetics & glitch gospel into wearable rebellion. Every drop is a riot — every sticker a key. Plug in and stay villain.</div>
+  <div class="info-wrap">
+    <div class="info green">FREE STICKERS<br>WITH EVERY ORDER</div>
+    <div class="info pink">🤘💀🤖🧷👾 JOIN<br>THE VILLAIN CLUB<br>🦾🧨☠️🕸️👁️‍🗨️</div>
   </div>
-  <footer>&copy; 2025 Villainous Brand / Outer Heaven</footer>
+
+  <div class="about">Born in Tokyo & brewed in chaos. We fuse cyberpunk signal flow, street‑zine aesthetics & glitch gospel into wearable rebellion. Every drop is a riot — every sticker a key. Plug in and stay villain.</div>
+</div>
+<footer>&copy; 2025 Villainous Brand / Outer Heaven</footer>
 
 <script>
-// hover label + audio
+// Hover labels & SFX
 const audio=document.getElementById('bgTrack');
+const swapMap={TACOS:'HAT',VILLAIN:'SHIRT',RAPTURE:'SHIRT'};
 document.querySelectorAll('.product').forEach(card=>{
-  const label=card.dataset.label;
   const h3=card.querySelector('h3');
-  card.addEventListener('mouseenter',()=>{
-    h3.textContent=label;
-    audio.currentTime=0;audio.play();
-  });
-  card.addEventListener('mouseleave',()=>{
-    h3.textContent=card.dataset.label==='HAT'?'TACOS':card.dataset.label==='SHIRT'&&h3.nextElementSibling.alt==='Shirt'?'VILLAIN':'RAPTURE';
-    audio.pause();
-  });
+  const orig=h3.textContent;
+  card.addEventListener('mouseenter',()=>{h3.textContent=swapMap[orig];audio.currentTime=0;audio.play()});
+  card.addEventListener('mouseleave',()=>{h3.textContent=orig;audio.pause()});
 });
 </script>
 </body>

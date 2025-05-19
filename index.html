@@ -26,15 +26,16 @@
       background: repeating-linear-gradient(
         45deg,
         #000 0px,
-        #000 89px,
-        #0f0 90px,
-        #f0f 91px,
-        #0ff 92px,
+        #000 88px,
+        #0f0 89px,
+        #f0f 90px,
+        #0ff 91px,
+        #0f0 92px,
         #000 93px
       );
-      opacity: 0.04;
+      opacity: 0.06;
       z-index: 0;
-      animation: glitchBg 1.5s infinite;
+      animation: glitchBg 2s infinite;
     }
 
     @keyframes glitchBg {
@@ -43,15 +44,27 @@
       100% { transform: translate(0, 0); }
     }
 
-    h1 {
+    .glitch-title {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 3rem;
       font-size: 6rem;
-      text-align: center;
       color: #f0f;
       text-shadow: 0 0 5px #0ff, 0 0 15px #f0f;
-      margin: 4rem 1rem 2rem;
+      animation: glitchText 1.2s infinite;
       position: relative;
       z-index: 1;
-      animation: glitchText 1.2s infinite;
+    }
+
+    .glitch-title span:first-child {
+      text-align: left;
+      flex: 1 1 40%;
+    }
+
+    .glitch-title span:last-child {
+      text-align: right;
+      flex: 1 1 40%;
     }
 
     @keyframes glitchText {
@@ -119,7 +132,10 @@
   </style>
 </head>
 <body>
-  <h1>YOUR VILLAIN ERA STARTS NOW</h1>
+  <div class="glitch-title">
+    <span>YOUR VILLAIN ERA</span>
+    <span>STARTS NOW</span>
+  </div>
 
   <div class="section">
     <div class="highlight">

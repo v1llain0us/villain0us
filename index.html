@@ -5,90 +5,90 @@
   <title>Villainous Brand // Tokyo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
     body {
       margin: 0;
       background: black;
       color: white;
-      font-family: monospace;
-      background-image: url('https://0x.villain0.us/static_bg.png'); /* Replace with actual glitch texture if desired */
-      background-size: cover;
-      background-position: center;
-      animation: flicker 3s infinite;
+      font-family: 'Press Start 2P', monospace;
+      background: repeating-linear-gradient(
+        45deg,
+        #000 0px,
+        #000 4px,
+        #0f0 4px,
+        #0f0 5px,
+        #000 5px,
+        #f0f 6px,
+        #000 6px,
+        #0ff 8px
+      );
+      background-size: 100px 100px;
+      animation: pulsebg 2s infinite;
     }
 
-    @keyframes flicker {
-      0%, 100% { background-color: black; }
-      50% { background-color: #0a0a0a; }
+    @keyframes pulsebg {
+      0%, 100% { background-position: 0 0; }
+      50% { background-position: 20px 20px; }
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 4rem;
       text-align: center;
       color: #f0f;
-      text-shadow: 0 0 3px #0ff, 0 0 10px #f0f;
-      margin: 2rem 0 1rem;
-      animation: glitchText 1.5s infinite;
+      text-shadow: 0 0 5px #0ff, 0 0 15px #f0f;
+      margin: 3rem 1rem 1rem;
+      animation: glitchText 1.2s infinite;
     }
 
     @keyframes glitchText {
       0% { text-shadow: 2px 2px #0ff; }
-      20% { text-shadow: -2px -2px #f0f; }
-      40% { text-shadow: 1px -1px #0f0; }
-      60% { text-shadow: -1px 2px #f00; }
-      80% { text-shadow: 2px 1px #ff0; }
-      100% { text-shadow: 2px 2px #0ff; }
+      25% { text-shadow: -2px -2px #f0f; }
+      50% { text-shadow: 1px -1px #0f0; }
+      75% { text-shadow: -1px 2px #f00; }
+      100% { text-shadow: 2px 1px #ff0; }
     }
 
     .section {
       padding: 1rem 2rem;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
     }
 
     .product-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      margin: 2rem 0;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 3rem;
+      margin: 3rem 0;
     }
 
     .product {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px dashed #0ff;
+      background: rgba(255, 255, 255, 0.07);
+      border: 2px dashed #0ff;
       padding: 1rem;
       text-align: center;
-      animation: noise 0.3s infinite;
+      animation: noise 0.5s infinite;
+    }
+
+    .product img {
+      max-width: 100%;
+      border: 1px solid #f0f;
+      margin-bottom: 1rem;
     }
 
     @keyframes noise {
       0%, 100% { transform: skewX(0); }
-      50% { transform: skewX(1.2deg); }
+      50% { transform: skewX(1deg); }
     }
 
     .product audio {
       width: 100%;
     }
 
-    .promo {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      margin: 2rem 0;
-      text-align: center;
-    }
-
-    .promo div {
-      background: rgba(255,255,255,0.08);
-      padding: 1rem 2rem;
-      margin: 1rem;
-      border: 1px solid #f0f;
-      text-shadow: 0 0 3px #0ff;
-    }
-
     .footer {
       text-align: center;
       margin-top: 4rem;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #aaa;
     }
   </style>
@@ -97,52 +97,32 @@
   <h1>YOUR VILLAIN ERA STARTS NOW</h1>
 
   <div class="section">
-    <h2 style="text-align: center; color: #0ff;">Featured Products</h2>
     <div class="product-grid">
       <div class="product">
-        <h3>TACOS</h3>
+        <img src="https://0x.villain0.us/mockup-ollie.png" alt="OLLIE Mockup">
+        <h2>OLLIE</h2>
         <audio controls>
           <source src="https://0x.villain0.us/zerocross%20-%20ollie%20(mixed).mp3" type="audio/mpeg">
         </audio>
         <p>¥666</p>
       </div>
       <div class="product">
-        <h3>VILLAIN</h3>
+        <img src="https://0x.villain0.us/mockup-incredible.png" alt="Incredible Mockup">
+        <h2>INCREDIBLE</h2>
         <audio controls>
           <source src="https://0x.villain0.us/zero%20cross%20-%20incredible%20(mixed).mp3" type="audio/mpeg">
         </audio>
         <p>¥666</p>
       </div>
       <div class="product">
-        <h3>[INSERT DESIGN HERE]</h3>
+        <img src="https://0x.villain0.us/mockup-heavenearth.png" alt="Heaven & Earth Mockup">
+        <h2>HEAVEN & EARTH</h2>
         <audio controls>
           <source src="https://0x.villain0.us/heavenearth%20(mixed).mp3" type="audio/mpeg">
         </audio>
         <p>¥666</p>
       </div>
     </div>
-  </div>
-
-  <div class="section promo">
-    <div>
-      <h3>FREE STICKERS</h3>
-      <p>With every order</p>
-    </div>
-    <div>
-      <h3>JOIN THE VILLAIN CLUB</h3>
-      <p>Sign up for updates</p>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2 style="text-align: center; color: #f0f;">ABOUT</h2>
-    <p style="text-align:center;">Born in Tokyo // Rebellion + Japanese Alt Culture<br>
-    Cyberpunk. Anarchy. Otaku. Emo. Punk. Streetwear.</p>
-  </div>
-
-  <div class="section" style="text-align:center;">
-    <h2 style="color:#f0f;">STICKER DROPS</h2>
-    <p>Find us in the wild: tattoo studios + shows. Every sticker has a QR link. Welcome to the underground.</p>
   </div>
 
   <div class="footer">

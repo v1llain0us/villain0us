@@ -7,220 +7,95 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-    body {
-      margin: 0;
-      background: black;
-      color: white;
-      font-family: 'Press Start 2P', monospace;
-      position: relative;
-      overflow-x: hidden;
+    /* ---------- GLOBAL ---------- */
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:#000;color:#fff;font-family:'Press Start 2P',monospace;overflow-x:hidden}
+
+    /* subtle pixel‑noise background */
+    body::before{
+      content:"";position:fixed;inset:0;z-index:0;
+      background:repeating-linear-gradient(45deg,#000 0 50px,#0f0 51px,#f0f 52px,#0ff 53px,#000 54px);
+      opacity:.12;animation:bgShift 2s steps(2) infinite;
+    }
+    @keyframes bgShift{50%{transform:translate(4px,4px)}}
+
+    a{color:#0ff;text-decoration:none}
+
+    .wrapper{position:relative;z-index:1;padding:0 1rem}
+
+    /* ---------- TITLE ---------- */
+    .title-row{display:flex;justify-content:center;gap:4vw;margin-top:5vh;flex-wrap:wrap}
+    .title-col{font-size:8vw;line-height:.9em;text-shadow:0 0 6px #f0f,0 0 12px #0ff;animation:textGlitch 1.2s infinite alternate}
+    .title-col.right{text-align:right}
+    .huge-now{font-size:18vw;line-height:.8em;text-align:center;margin:0 auto -2vh;animation:textGlitch 1.2s infinite alternate}
+
+    @keyframes textGlitch{
+      0%{text-shadow:2px 2px #0ff}
+      33%{text-shadow:-3px 1px #f0f}
+      66%{text-shadow:1px -3px #0f0}
+      100%{text-shadow:-2px 2px #ff0}
     }
 
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: repeating-linear-gradient(
-        45deg,
-        #000 0px,
-        #000 60px,
-        #0f0 61px,
-        #f0f 62px,
-        #0ff 63px,
-        #0f0 64px,
-        #000 65px
-      );
-      opacity: 0.10;
-      z-index: 0;
-      animation: glitchBg 1.5s infinite;
-    }
+    /* ---------- PRODUCTS ---------- */
+    .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:3rem;padding:4rem 0}
+    .product{border:3px dashed #0ff;padding:1rem;text-align:center;position:relative;overflow:hidden}
+    .product::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 2px,#0f0 3px 4px);opacity:.15;mix-blend-mode:color-dodge;animation:borderNoise .25s infinite alternate}
+    @keyframes borderNoise{to{transform:translate(-3px,2px)}}
+    .product img{max-width:100%;border:2px solid #f0f}
 
-    @keyframes glitchBg {
-      0% { transform: translate(0, 0); }
-      50% { transform: translate(2px, 2px); }
-      100% { transform: translate(0, 0); }
-    }
+    /* ---------- INFO BOXES ---------- */
+    .info-wrap{display:flex;flex-wrap:wrap;justify-content:center;gap:2rem;padding-bottom:3rem}
+    .info{flex:1 1 280px;max-width:420px;padding:2rem;border:4px solid;font-size:5vw;min-font-size:24px;text-align:center;font-style:italic;line-height:1.1em;letter-spacing:-1px}
+    .green{color:#0f0;border-color:#0f0}
+    .pink{color:#f0f;border-color:#f0f;white-space:pre-wrap}
 
-    .glitch-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4rem 2rem 1rem;
-      font-size: 5vw;
-      color: #f0f;
-      text-shadow: 0 0 5px #0ff, 0 0 15px #f0f;
-      animation: glitchText 1.2s infinite;
-      position: relative;
-      z-index: 1;
-      width: 100%;
-    }
+    /* ---------- ABOUT ---------- */
+    .about{border-top:2px solid #0ff;margin:4rem auto 6rem;text-align:center;font-size:1rem;max-width:800px;padding-top:2rem;color:#0ff}
 
-    .glitch-title span:first-child {
-      text-align: left;
-    }
+    /* ---------- FOOTER ---------- */
+    footer{text-align:center;color:#aaa;font-size:.75rem;padding-bottom:2rem}
 
-    .glitch-title span:last-child {
-      text-align: right;
-    }
-
-    .glitch-title .now {
-      font-size: 12vw;
-      width: 100%;
-      text-align: center;
-      margin-top: 1rem;
-    }
-
-    @keyframes glitchText {
-      0% { text-shadow: 2px 2px #0ff; }
-      25% { text-shadow: -2px -2px #f0f; }
-      50% { text-shadow: 1px -1px #0f0; }
-      75% { text-shadow: -1px 2px #f00; }
-      100% { text-shadow: 2px 1px #ff0; }
-    }
-
-    .section {
-      padding: 1rem 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 3rem;
-      margin: 3rem 0;
-    }
-
-    .product {
-      background: rgba(255, 255, 255, 0.07);
-      border: 3px dashed #0ff;
-      padding: 1rem;
-      text-align: center;
-      animation: glitchBorder 0.3s infinite alternate;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .product img {
-      max-width: 100%;
-      border: 1px solid #f0f;
-      margin-bottom: 1rem;
-      z-index: 2;
-      position: relative;
-    }
-
-    @keyframes glitchBorder {
-      0% { border-color: #0ff; transform: scale(1); }
-      25% { border-color: #f0f; transform: scale(1.01); }
-      50% { border-color: #0f0; transform: scale(0.99); }
-      75% { border-color: #ff0; transform: scale(1.02); }
-      100% { border-color: #f00; transform: scale(1); }
-    }
-
-    .dual-block {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 2rem;
-      margin: 3rem 0;
-    }
-
-    .green-box, .pink-box {
-      flex: 1 1 300px;
-      padding: 3rem 2rem;
-      border: 4px solid;
-      font-size: 2.2vw;
-      text-align: center;
-    }
-
-    .green-box {
-      color: #0f0;
-      border-color: #0f0;
-    }
-
-    .pink-box {
-      color: #f0f;
-      border-color: #f0f;
-      white-space: pre-wrap;
-    }
-
-    .about-section {
-      padding: 4rem 2rem;
-      text-align: center;
-      font-size: 1.1rem;
-      color: #0ff;
-      max-width: 800px;
-      margin: 3rem auto;
-      border-top: 2px solid #0ff;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 4rem;
-      font-size: 0.75rem;
-      color: #aaa;
-      position: relative;
-      z-index: 1;
-    }
+    /* Responsive font fix */
+    @media(max-width:600px){.title-col{font-size:15vw}.huge-now{font-size:30vw}.info{font-size:8vw}}
   </style>
 </head>
 <body>
-  <div class="glitch-title">
-    <span>YOUR VILLAIN</span>
-    <span>ARC STARTS</span>
-  </div>
-  <div class="glitch-title now">NOW</div>
+  <div class="wrapper">
 
-  <div class="section">
-    <div class="product-grid">
-      <div class="product">
-        <h2>TACOS</h2>
-        <img src="image.png" alt="Hat Product Image">
-        <p>¥666</p>
-      </div>
-      <div class="product">
-        <h2>VILLAIN</h2>
-        <img src="image2.png" alt="Shirt Product Image">
-        <p>¥666</p>
-      </div>
-      <div class="product">
-        <h2>INSERT DESIGN HERE</h2>
-        <img src="image3.png" alt="Hoodie Product Image">
-        <p>¥666</p>
-      </div>
+    <!-- TITLE -->
+    <div class="title-row">
+      <div class="title-col left">YOUR<br>VILL<br>AIN</div>
+      <div class="title-col right">ARC<br>STARTS</div>
+    </div>
+    <div class="huge-now">NOW</div>
+
+    <!-- PRODUCTS -->
+    <section class="product-grid">
+      <div class="product"><h3>TACOS</h3><img src="image.png" alt="Hat"><p>¥666</p></div>
+      <div class="product"><h3>VILLAIN</h3><img src="image2.png" alt="Shirt"><p>¥666</p></div>
+      <div class="product"><h3>INSERT</h3><img src="image3.png" alt="Hoodie"><p>¥666</p></div>
+    </section>
+
+    <!-- INFO BOXES -->
+    <div class="info-wrap">
+      <div class="info green">FREE STICKERS<br>WITH EVERY ORDER</div>
+      <div class="info pink">／‾‾‾‾‾‾‾‾‾＼
+|  ᴠɪʟʟᴀɪɴ 🐶 ᴅᴏɢ  |
+＼＿＿＿＿＿／
+JOIN THE VILLAIN CLUB
+＼‾‾‾‾‾‾‾‾‾／
+|    ʙᴀʀᴋ 🧷 ʙᴀʀᴋ   |
+＼＿＿＿＿＿／
+</div>
     </div>
 
-    <div class="dual-block">
-      <div class="green-box">
-        FREE STICKERS<br>WITH EVERY ORDER
-      </div>
-
-      <div class="pink-box">
-        ／‾‾‾‾‾‾‾‾‾＼
-       |  ᴠɪʟʟᴀɪɴ 🐶 ᴅᴏɢ  |
-        ＼＿＿＿＿＿／
-        JOIN THE VILLAIN CLUB
-        SIGN UP FOR UPDATES
-        ／‾‾‾‾‾‾‾‾‾＼
-       |    ʙᴀʀᴋ 🧷 ʙᴀʀᴋ   |
-        ＼＿＿＿＿＿／
-      </div>
+    <!-- ABOUT -->
+    <div class="about">
+      Born in Tokyo & bred in chaos. We fuse cyberpunk grids, street zines, and glitch gospel into wearable rebellion. Every drop is a signal — every sticker a key. Plug in, tune out, stay villain.
     </div>
 
-    <div class="about-section">
-      Born in Tokyo / Rebellion + Japanese Alt Culture.<br>
-      Glitch gospel. Street zines. Flash drives from the underground.<br>
-      Every drop is a riot, every thread a signal.
-    </div>
   </div>
 
-  <div class="footer">
-    &copy; 2025 Villainous Brand / Outer Heaven
-  </div>
+  <footer>&copy; 2025 Villainous Brand / Outer Heaven</footer>
 </body>
 </html>

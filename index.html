@@ -1,110 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>villain0.us // corrupted store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>Villainous Brand // Tokyo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       margin: 0;
-      padding: 0;
       background: black;
-      font-family: 'Courier New', monospace;
-      color: lime;
-      overflow-x: hidden;
-      animation: flickerBg 8s infinite;
+      color: white;
+      font-family: monospace;
+      background-image: url('https://0x.villain0.us/static_bg.png'); /* Replace with actual glitch texture if desired */
+      background-size: cover;
+      background-position: center;
+      animation: flicker 3s infinite;
     }
 
-    @keyframes flickerBg {
+    @keyframes flicker {
       0%, 100% { background-color: black; }
-      20% { background-color: #0f0; }
-      40% { background-color: black; }
-      60% { background-color: #111; }
-      80% { background-color: #222; }
+      50% { background-color: #0a0a0a; }
     }
 
     h1 {
-      text-align: center;
       font-size: 3rem;
-      letter-spacing: 0.2rem;
-      margin-top: 2rem;
-      animation: glitchText 1.2s infinite;
+      text-align: center;
+      color: #f0f;
+      text-shadow: 0 0 3px #0ff, 0 0 10px #f0f;
+      margin: 2rem 0 1rem;
+      animation: glitchText 1.5s infinite;
     }
 
     @keyframes glitchText {
-      0% { text-shadow: 2px 2px red; }
-      25% { text-shadow: -2px -2px cyan; }
-      50% { text-shadow: 2px -2px lime; }
-      75% { text-shadow: -2px 2px magenta; }
-      100% { text-shadow: 2px 2px red; }
+      0% { text-shadow: 2px 2px #0ff; }
+      20% { text-shadow: -2px -2px #f0f; }
+      40% { text-shadow: 1px -1px #0f0; }
+      60% { text-shadow: -1px 2px #f00; }
+      80% { text-shadow: 2px 1px #ff0; }
+      100% { text-shadow: 2px 2px #0ff; }
     }
 
-    .store {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      padding: 2rem;
-      max-width: 1200px;
+    .section {
+      padding: 1rem 2rem;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
-    .item {
-      border: 2px dashed lime;
-      padding: 1rem;
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .product {
       background: rgba(255, 255, 255, 0.05);
-      position: relative;
+      border: 1px dashed #0ff;
+      padding: 1rem;
+      text-align: center;
       animation: noise 0.3s infinite;
-    }
-
-    .item:hover {
-      background: #0f0;
-      color: black;
-    }
-
-    .item h2 {
-      margin-top: 0;
     }
 
     @keyframes noise {
       0%, 100% { transform: skewX(0); }
-      50% { transform: skewX(1.5deg); }
+      50% { transform: skewX(1.2deg); }
+    }
+
+    .product audio {
+      width: 100%;
+    }
+
+    .promo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .promo div {
+      background: rgba(255,255,255,0.08);
+      padding: 1rem 2rem;
+      margin: 1rem;
+      border: 1px solid #f0f;
+      text-shadow: 0 0 3px #0ff;
     }
 
     .footer {
       text-align: center;
-      font-size: 0.9rem;
-      margin-top: 3rem;
-      color: #666;
+      margin-top: 4rem;
+      font-size: 0.8rem;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-  <h1>VILLAIN0.US // STORE</h1>
-  <div class="store">
-    <div class="item">
-      <h2>OLLIE - MP3</h2>
-      <audio controls autoplay>
-        <source src="https://0x.villain0.us/zerocross%20-%20ollie%20(mixed).mp3" type="audio/mpeg">
-      </audio>
-      <p>¥666 - corrupted audio artifact</p>
-    </div>
-    <div class="item">
-      <h2>HEAVEN & EARTH - MP3</h2>
-      <audio controls autoplay>
-        <source src="https://0x.villain0.us/heavenearth%20(mixed).mp3" type="audio/mpeg">
-      </audio>
-      <p>¥666 - synth exorcism download</p>
-    </div>
-    <div class="item">
-      <h2>INCREDIBLE - MP3</h2>
-      <audio controls autoplay>
-        <source src="https://0x.villain0.us/zero%20cross%20-%20incredible%20(mixed).mp3" type="audio/mpeg">
-      </audio>
-      <p>¥666 - illegal audio relic</p>
+  <h1>YOUR VILLAIN ERA STARTS NOW</h1>
+
+  <div class="section">
+    <h2 style="text-align: center; color: #0ff;">Featured Products</h2>
+    <div class="product-grid">
+      <div class="product">
+        <h3>TACOS</h3>
+        <audio controls>
+          <source src="https://0x.villain0.us/zerocross%20-%20ollie%20(mixed).mp3" type="audio/mpeg">
+        </audio>
+        <p>¥666</p>
+      </div>
+      <div class="product">
+        <h3>VILLAIN</h3>
+        <audio controls>
+          <source src="https://0x.villain0.us/zero%20cross%20-%20incredible%20(mixed).mp3" type="audio/mpeg">
+        </audio>
+        <p>¥666</p>
+      </div>
+      <div class="product">
+        <h3>[INSERT DESIGN HERE]</h3>
+        <audio controls>
+          <source src="https://0x.villain0.us/heavenearth%20(mixed).mp3" type="audio/mpeg">
+        </audio>
+        <p>¥666</p>
+      </div>
     </div>
   </div>
+
+  <div class="section promo">
+    <div>
+      <h3>FREE STICKERS</h3>
+      <p>With every order</p>
+    </div>
+    <div>
+      <h3>JOIN THE VILLAIN CLUB</h3>
+      <p>Sign up for updates</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 style="text-align: center; color: #f0f;">ABOUT</h2>
+    <p style="text-align:center;">Born in Tokyo // Rebellion + Japanese Alt Culture<br>
+    Cyberpunk. Anarchy. Otaku. Emo. Punk. Streetwear.</p>
+  </div>
+
+  <div class="section" style="text-align:center;">
+    <h2 style="color:#f0f;">STICKER DROPS</h2>
+    <p>Find us in the wild: tattoo studios + shows. Every sticker has a QR link. Welcome to the underground.</p>
+  </div>
+
   <div class="footer">
-    <p>&copy; 2024 VILLAIN0.US — Tokyo / Chaos Engine</p>
+    &copy; 2024 VILLAIN0.US — Built in Tokyo // Hosted in Chaos
   </div>
 </body>
 </html>

@@ -12,32 +12,45 @@
       background: black;
       color: white;
       font-family: 'Press Start 2P', monospace;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: repeating-linear-gradient(
         45deg,
         #000 0px,
-        #000 4px,
-        #0f0 4px,
-        #0f0 5px,
-        #000 5px,
-        #f0f 6px,
-        #000 6px,
-        #0ff 8px
+        #000 89px,
+        #0f0 90px,
+        #f0f 91px,
+        #0ff 92px,
+        #000 93px
       );
-      background-size: 100px 100px;
-      animation: pulsebg 2s infinite;
+      opacity: 0.04;
+      z-index: 0;
+      animation: glitchBg 1.5s infinite;
     }
 
-    @keyframes pulsebg {
-      0%, 100% { background-position: 0 0; }
-      50% { background-position: 20px 20px; }
+    @keyframes glitchBg {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(2px, 2px); }
+      100% { transform: translate(0, 0); }
     }
 
     h1 {
-      font-size: 4rem;
+      font-size: 6rem;
       text-align: center;
       color: #f0f;
       text-shadow: 0 0 5px #0ff, 0 0 15px #f0f;
-      margin: 3rem 1rem 1rem;
+      margin: 4rem 1rem 2rem;
+      position: relative;
+      z-index: 1;
       animation: glitchText 1.2s infinite;
     }
 
@@ -53,6 +66,8 @@
       padding: 1rem 2rem;
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     .product-grid {
@@ -90,6 +105,16 @@
       margin-top: 4rem;
       font-size: 0.75rem;
       color: #aaa;
+      position: relative;
+      z-index: 1;
+    }
+
+    .highlight {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1.5rem;
+      margin: 2rem auto;
+      border: 1px solid #0ff;
+      text-align: center;
     }
   </style>
 </head>
@@ -97,6 +122,19 @@
   <h1>YOUR VILLAIN ERA STARTS NOW</h1>
 
   <div class="section">
+    <div class="highlight">
+      <h2 style="color: #0ff;">STICKER DROPS</h2>
+      <p>We’re handing out QR-coded stickers at Tokyo shows + tattoo shops. Find one, scan it, unlock chaos. Every code gives you a discount or unreleased content.</p>
+    </div>
+
+    <div class="highlight">
+      <h2 style="color: #f0f;">MUSIC</h2>
+      <p>This brand lives on sound. Every drop is tied to a track.</p>
+      <audio controls>
+        <source src="https://0x.villain0.us/zerocross%20-%20ollie%20(mixed).mp3" type="audio/mpeg">
+      </audio>
+    </div>
+
     <div class="product-grid">
       <div class="product">
         <img src="https://0x.villain0.us/mockup-ollie.png" alt="OLLIE Mockup">

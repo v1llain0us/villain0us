@@ -26,16 +26,16 @@
       background: repeating-linear-gradient(
         45deg,
         #000 0px,
-        #000 88px,
-        #0f0 89px,
-        #f0f 90px,
-        #0ff 91px,
-        #0f0 92px,
-        #000 93px
+        #000 60px,
+        #0f0 61px,
+        #f0f 62px,
+        #0ff 63px,
+        #0f0 64px,
+        #000 65px
       );
-      opacity: 0.06;
+      opacity: 0.10;
       z-index: 0;
-      animation: glitchBg 2s infinite;
+      animation: glitchBg 1.5s infinite;
     }
 
     @keyframes glitchBg {
@@ -96,6 +96,35 @@
       padding: 1rem;
       text-align: center;
       animation: glitchBorder 0.3s infinite alternate;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(45deg, #0f0 0px, #0f0 1px, transparent 1px, transparent 3px);
+      opacity: 0.15;
+      mix-blend-mode: color-dodge;
+      pointer-events: none;
+      animation: overlayGlitch 0.3s infinite alternate;
+    }
+
+    @keyframes overlayGlitch {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-2px, 2px); }
+    }
+
+    .product img {
+      max-width: 100%;
+      border: 1px solid #f0f;
+      margin-bottom: 1rem;
+      z-index: 2;
+      position: relative;
     }
 
     @keyframes glitchBorder {
@@ -104,14 +133,6 @@
       50% { border-color: #0f0; transform: scale(0.99); }
       75% { border-color: #ff0; transform: scale(1.02); }
       100% { border-color: #f00; transform: scale(1); }
-    }
-
-    .ascii-art {
-      white-space: pre-wrap;
-      font-size: 0.9rem;
-      color: #0ff;
-      text-align: left;
-      margin-bottom: 1rem;
     }
 
     .footer {
@@ -155,35 +176,17 @@
     <div class="product-grid">
       <div class="product">
         <h2>HAT</h2>
-        <div class="ascii-art">
-          ______<br>
-         /      \<br>
-        |        |<br>
-        \______/ <br>
-         \____/  
-        </div>
+        <img src="image.png" alt="Hat Product Image">
         <p>¥666</p>
       </div>
       <div class="product">
         <h2>SHIRT</h2>
-        <div class="ascii-art">
-          |------|<br>
-          |      |<br>
-          |      |<br>
-         /        \<br>
-        |          |
-        </div>
+        <img src="image2.png" alt="Shirt Product Image">
         <p>¥666</p>
       </div>
       <div class="product">
         <h2>HOODIE</h2>
-        <div class="ascii-art">
-          ________<br>
-         |        |<br>
-         |  () () |<br>
-         |   __   |<br>
-         |________|
-        </div>
+        <img src="image3.png" alt="Hoodie Product Image">
         <p>¥666</p>
       </div>
     </div>

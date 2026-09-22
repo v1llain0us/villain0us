@@ -11,6 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Snipcart CSS -->
+  <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.css" />
   
   <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -82,9 +84,12 @@
     @media (min-width: 900px) { .split { grid-template-columns: 1fr 1fr; align-items: start; } }
     .badge { display: inline-block; padding: 0.4rem 0.8rem; font-size: 0.75rem; font-weight: 800; background: var(--primary); color: #000; margin-bottom: 1rem; border: 1px solid var(--primary); }
     .card { background: var(--card-bg); padding: clamp(1.5rem, 3vw, 2.5rem); box-shadow: var(--shadow); border: 1px solid var(--border); backdrop-filter: blur(14px); }
-    .btn, .btnWide, .btn-outline { font-family: var(--font-heading); background: var(--bg); color: var(--primary); border: 1px solid var(--primary); padding: 0.8rem 1.5rem; font-weight: 700; display: inline-block; cursor: pointer; text-transform: uppercase; box-shadow: 4px 4px 0px var(--primary); transition: 0.1s; }
-    .btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--primary); }
+    
+    /* BUTTONS */
+    .btn, .btnWide, .btn-outline { font-family: var(--font-heading); background: var(--bg); color: var(--primary); border: 1px solid var(--primary); padding: 0.8rem 1.5rem; font-weight: 700; display: inline-block; cursor: pointer; text-transform: uppercase; box-shadow: 4px 4px 0px var(--primary); transition: 0.1s; outline: none; }
+    .btn:active, .btnWide:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--primary); }
     .btnWide { width: 100%; text-align: center; }
+    .btn:hover { background: rgba(0, 255, 100, 0.1); }
 
     /* =========================================
        MODULES: TRACKLIST & LYRICS TERMINAL 
@@ -139,15 +144,14 @@
       100% { transform: translate(0) }
     }
 
-    /* LYRICS TERMINAL (FIXED) */
+    /* LYRICS TERMINAL */
     .lyrics-container {
       position: relative;
       height: 450px;
       background: #000;
-      overflow: hidden; /* Keeps the overlay fixed */
+      overflow: hidden; 
     }
     
-    /* CRT Scanline effect (Fixed position overlay) */
     .crt-overlay {
       position: absolute;
       inset: 0;
@@ -157,7 +161,6 @@
       pointer-events: none;
     }
 
-    /* Scrollable Inner Content */
     .lyrics-scroll {
       height: 100%;
       overflow-y: auto;
@@ -177,6 +180,18 @@
     .cursor { animation: blink 1s step-end infinite; color: var(--accent); font-weight: bold; }
     @keyframes blink { 50% { opacity: 0; } }
 
+    /* MERCH GRID (VILLAINOUS ENGINE) */
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 2rem 0; }
+    .product { background: var(--bg-alt); padding: 2rem 1rem; text-align: center; position: relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
+    .product h3 { margin-top: 0; font-size: 1.2rem; font-weight: 400; letter-spacing: 2px; color: var(--primary); }
+    .product-img-box { width: 100%; aspect-ratio: 1; background: #000; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); margin: 1rem 0; font-family: var(--font-heading); color: var(--muted); font-size: 1rem; letter-spacing: 2px; transition: 0.3s; }
+    .product:hover .product-img-box { border-color: var(--primary); color: var(--accent); text-shadow: 2px 2px 0px rgba(255, 0, 60, 0.5); box-shadow: inset 0 0 20px rgba(0, 255, 100, 0.1); }
+
+    /* MARQUEE */
+    .marquee-container { width: 100vw; max-width: 100%; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; padding: 1.5rem 0; margin: 4rem 0; background: var(--bg-alt); position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; }
+    .marquee-scroll { display: inline-block; white-space: nowrap; animation: marquee 12s linear infinite; font-size: 1.2rem; font-weight: 700; font-family: var(--font-heading); color: var(--primary); letter-spacing: 3px; }
+    @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+
     /* LAYOUT UTILS */
     .eventGrid { display: grid; gap: 2rem; margin-top: 2rem; }
     @media (min-width: 900px) { .eventGrid { grid-template-columns: 1fr 1fr; } }
@@ -186,6 +201,10 @@
   </style>
 </head>
 <body lang="en">
+
+<!-- Snipcart Hidden Config -->
+<div hidden id="snipcart" data-api-key="YOUR_PUBLIC_API_KEY" data-currency="JPY"></div>
+<script async src="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.js"></script>
 
 <!-- BACKGROUND AUDIO WAVEFORM -->
 <div class="trail-backdrop" aria-hidden="true">
@@ -203,17 +222,20 @@
     <div class="brand">0CROSS_OS</div>
     <div class="links">
       <a href="#terminal">Terminal</a>
+      <a href="#merch">Supply</a>
       <a href="#archive">Archive</a>
       <a href="#loadout">Loadout</a>
     </div>
     <div class="actions">
       <button id="langToggle" class="brand-text-match">JP</button>
       <button id="themeToggle">⬛</button>
+      <button class="btn snipcart-checkout" style="padding: 0.5rem 1rem; font-size: 0.8rem;">CART (0)</button>
     </div>
     <button id="menuBtn" class="hamburger"><span></span><span></span><span></span></button>
   </div>
   <div id="mobileMenu" class="mobileMenu">
     <a href="#terminal">Terminal</a>
+    <a href="#merch">Supply</a>
     <a href="#archive">Archive</a>
     <a href="#loadout">Loadout</a>
   </div>
@@ -236,7 +258,6 @@
 <!-- =============== TERMINAL MODULE =============== -->
 <section id="terminal" class="section shell split">
   
-  <!-- Left Column: Tracklist -->
   <div class="module-window" id="tracklist-module">
     <div class="module-header">
       <span>0CROSS_OS // TRACKS</span>
@@ -257,7 +278,6 @@
     </ul>
   </div>
 
-  <!-- Right Column: Lyrics Terminal (FIXED) -->
   <div class="module-window" id="lyrics-module">
     <div class="module-header">
       <span id="lyric-header">DECRYPTING // HERE_DEMO.TXT</span>
@@ -273,8 +293,44 @@
 
 </section>
 
-<!-- =============== ARCHIVE (RESTORED MAP) =============== -->
-<section id="archive" class="section shell card">
+<!-- MARQUEE TRANSITION -->
+<div class="marquee-container">
+  <div class="marquee-scroll">
+    <span>FREE STICKERS WITH EVERY ORDER // 🤘💀🤖🧷👾 JOIN THE VILLAIN CLUB 🦾🧨☠️🕸️👁️‍🗨️ // FREE STICKERS WITH EVERY ORDER // 🤘💀🤖🧷👾 JOIN THE VILLAIN CLUB 🦾🧨☠️🕸️👁️‍🗨️ // </span>
+  </div>
+</div>
+
+<!-- =============== MERCH (VILLAINOUS INTEGRATION) =============== -->
+<section id="merch" class="section shell card">
+  <span class="badge">Supply Drop</span>
+  <h2 style="font-size: 1.5rem; color: var(--primary);">Official Gear</h2>
+  <p class="subtle">Villainous Brand collaboration. Wearable rebellion.</p>
+  
+  <div class="product-grid">
+    
+    <div class="product">
+      <h3>VILLAIN TEE</h3>
+      <div class="product-img-box">IMG_LOAD_ERROR</div>
+      <button class="btnWide snipcart-add-item" data-item-id="villain-tee" data-item-price="6666" data-item-url="https://villain0.us" data-item-name="VILLAIN TEE">¥6666 // BUY</button>
+    </div>
+    
+    <div class="product">
+      <h3>DRACULA CASSETTE</h3>
+      <div class="product-img-box">IMG_LOAD_ERROR</div>
+      <button class="btnWide snipcart-add-item" data-item-id="dracula-tape" data-item-price="1500" data-item-url="https://villain0.us" data-item-name="DRACULA CASSETTE">¥1500 // BUY</button>
+    </div>
+    
+    <div class="product">
+      <h3>RAPTURE CAP</h3>
+      <div class="product-img-box">IMG_LOAD_ERROR</div>
+      <button class="btnWide snipcart-add-item" data-item-id="rapture-cap" data-item-price="3500" data-item-url="https://villain0.us" data-item-name="RAPTURE CAP">¥3500 // BUY</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- =============== ARCHIVE =============== -->
+<section id="archive" class="section shell card" style="margin-top: 4rem;">
   <span class="badge">Live Archive</span>
   <h2 style="font-size: 1.5rem; color: var(--primary);">The Baia Tokyo Set</h2>
   <p class="subtle">Archive: September 19, 2026</p>
@@ -294,7 +350,7 @@
   </div>
 </section>
 
-<!-- =============== LOADOUT (RESTORED) =============== -->
+<!-- =============== LOADOUT =============== -->
 <section id="loadout" class="section shell">
   <h2 class="headline" style="text-align: center;">Studio Loadout</h2>
   <div style="text-align: center; margin-bottom: 3rem;"><p class="subtle">The hardware and software powering the noise.</p></div>
@@ -344,7 +400,7 @@
   // Swiper Init
   new Swiper('.swiper', { loop: true, autoplay: { delay: 4000, disableOnInteraction: false }, effect: 'fade' });
 
-  // Map Init (Restored and Functional)
+  // Map Init
   const mapCenter = [35.6580, 139.7016]; 
   const map = L.map('meetMap', { scrollWheelZoom: false }).setView(mapCenter, 15);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM' }).addTo(map);
@@ -401,18 +457,13 @@
 
   tracks.forEach(track => {
     track.addEventListener('click', function() {
-      // Remove active class from all
       tracks.forEach(t => t.classList.remove('active'));
-      // Add active to clicked
       this.classList.add('active');
       
       const trackId = this.getAttribute('data-track');
       const trackName = this.innerText.replace(/[0-9.]/g, '').trim().replace(/ /g, '_').toUpperCase();
       
-      // Update header
       lyricHeader.innerText = `DECRYPTING // ${trackName}.TXT`;
-      
-      // Run the actual typing animation
       typeWriter(lyricsDB[trackId], display);
     });
   });

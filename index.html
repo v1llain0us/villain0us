@@ -122,12 +122,16 @@
     
     .status-dot { height: 8px; width: 8px; background-color: var(--accent); border-radius: 50%; display: inline-block; box-shadow: 0 0 10px var(--accent); }
 
+    #stop-audio { cursor: pointer; color: var(--accent); transition: 0.2s; }
+    #stop-audio:hover { color: #fff; text-shadow: 0 0 5px var(--accent); }
+
     /* TRACKLIST */
     .tracklist { list-style: none; padding: 20px; margin: 0; }
     .track { padding: 12px 0; font-size: 14px; cursor: pointer; position: relative; color: var(--muted); transition: color 0.1s; border-bottom: 1px dashed var(--border); }
     .track:last-child { border-bottom: none; }
     .track.active { color: var(--primary); font-weight: bold; }
     .track.active::before { content: '>'; position: absolute; left: -15px; color: var(--accent); }
+    .track.playing::after { content: ' [ ▶ ]'; color: var(--accent); animation: blink 1s step-end infinite; }
     
     .track:hover {
       color: var(--ink);
@@ -264,24 +268,26 @@
       <span class="status-dot"></span>
     </div>
     <ul class="tracklist" id="tracklist">
-      <li class="track active" data-track="0">01. HERE (DEMO)</li>
-      <li class="track" data-track="1">02. AURA (DEMO)</li>
-      <li class="track" data-track="2">03. DRACULA</li>
-      <li class="track" data-track="3">04. WAY PAST COOL</li>
-      <li class="track" data-track="4">05. BATTERY DRAINED</li>
-      <li class="track" data-track="5">06. MELT FOREVER</li>
-      <li class="track" data-track="6">07. AUDIENCE</li>
-      <li class="track" data-track="7">08. FREE PLANS</li>
-      <li class="track" data-track="8">09. TIMELINES</li>
-      <li class="track" data-track="9">10. DIAMOND</li>
-      <li class="track" data-track="10">11. LISAN AL GAIB (BONUS)</li>
+      <li class="track active" data-track="0" data-src="HERE (DEMO).m4a">01. HERE (DEMO)</li>
+      <li class="track" data-track="1" data-src="AURA (DEMO).m4a">02. AURA (DEMO)</li>
+      <li class="track" data-track="2" data-src="DRACULA *.mp3">03. DRACULA</li>
+      <li class="track" data-track="3" data-src="WAY PAST COOL *.mp3">04. WAY PAST COOL</li>
+      <li class="track" data-track="4" data-src="BATTERY DRAINED *.mp3">05. BATTERY DRAINED</li>
+      <li class="track" data-track="5">06. MELT FOREVER [COMING SOON]</li>
+      <li class="track" data-track="6">07. AUDIENCE [COMING SOON]</li>
+      <li class="track" data-track="7">08. FREE PLANS [COMING SOON]</li>
+      <li class="track" data-track="8">09. TIMELINES [COMING SOON]</li>
+      <li class="track" data-track="9">10. DIAMOND [COMING SOON]</li>
+      <li class="track" data-track="10">11. LISAN AL GAIB (BONUS) [COMING SOON]</li>
     </ul>
   </div>
 
   <div class="module-window" id="lyrics-module">
     <div class="module-header">
-      <span id="lyric-header">DECRYPTING // HERE_DEMO.TXT</span>
-      <span class="status-dot" style="background-color: var(--primary); box-shadow: 0 0 10px var(--primary);"></span>
+      <span id="lyric-header">DECRYPTING // SYSTEM_READY.TXT</span>
+      <div>
+        <span id="stop-audio" title="Stop Playback">[ ◼ ]</span>
+      </div>
     </div>
     <div class="lyrics-container">
       <div class="crt-overlay"></div>
@@ -406,6 +412,20 @@
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM' }).addTo(map);
   L.marker(mapCenter).addTo(map).bindPopup('Baia Tokyo, Shibuya');
 
+  // Audio Engine
+  const player = new Audio();
+  const stopBtn = document.getElementById('stop-audio');
+  
+  stopBtn.addEventListener('click', () => {
+    player.pause();
+    player.currentTime = 0;
+    document.querySelectorAll('.track').forEach(t => t.classList.remove('playing'));
+  });
+
+  player.addEventListener('ended', () => {
+    document.querySelectorAll('.track').forEach(t => t.classList.remove('playing'));
+  });
+
   // Lyrics Database
   const lyricsDB = [
     `Rock man\nGot no cash\nNot so fast\nGot no plans\nPlot it to last\n\nCount up the racks\nThat's that\nLotta tasks\nBrought it to max\nLotta facts don’t matter\n\nBounce yo ass\nPound yo glass\nShot a glance\nAt my hag\nI’m enhanced\n\nYou up late\nYou a fan\nWhat they say\nOn the gram\nNo I don't think you’d fathom\nNo not after you not bad\nWhere you at?\n\nDoubt you’d last, doubt you’d last\nRock man\nGot no cash\nWhere you at?\nAre you with her? Or you slither?\n\nGotta measure all my bands\nKinda glad she got no past\nAnd no rhythm, jus a figment\n\nBounce your ass\nWhen you sitting on the glass\nGirl you know I won’t last\nSolitaire\nOn my half\nWith a gram\nYou enhanced\nYour stamina\nGirl you know I’m entranced`,
@@ -452,19 +472,38 @@
     }, speed);
   }
 
-  // Load first track initially
-  typeWriter(lyricsDB[0], display);
+  // Load initial prompt
+  typeWriter("> WAITING FOR TRACK SELECTION...", display);
 
   tracks.forEach(track => {
     track.addEventListener('click', function() {
-      tracks.forEach(t => t.classList.remove('active'));
+      // Manage Active State
+      tracks.forEach(t => t.classList.remove('active', 'playing'));
       this.classList.add('active');
       
       const trackId = this.getAttribute('data-track');
-      const trackName = this.innerText.replace(/[0-9.]/g, '').trim().replace(/ /g, '_').toUpperCase();
+      const audioSrc = this.getAttribute('data-src');
+      
+      // Clean up track name for the terminal header
+      const trackName = this.innerText
+        .replace(/[0-9.]/g, '')
+        .replace('[COMING SOON]', '')
+        .trim()
+        .replace(/ /g, '_')
+        .toUpperCase();
       
       lyricHeader.innerText = `DECRYPTING // ${trackName}.TXT`;
-      typeWriter(lyricsDB[trackId], display);
+      
+      // Play Audio or Throw Terminal Error
+      if (audioSrc) {
+        player.src = audioSrc;
+        player.play().catch(e => console.log('Audio playback requires user interaction.'));
+        this.classList.add('playing');
+        typeWriter(lyricsDB[trackId], display);
+      } else {
+        player.pause();
+        typeWriter(`[ERROR: AUDIO_FILE_NOT_FOUND]\n> TRACK "${trackName}" IS CURRENTLY UNAVAILABLE.\n> STATUS: COMING SOON...`, display);
+      }
     });
   });
 </script>

@@ -84,6 +84,7 @@
     .card { background: var(--card-bg); padding: clamp(1.5rem, 3vw, 2.5rem); box-shadow: var(--shadow); border: 1px solid var(--border); backdrop-filter: blur(14px); }
     .btn, .btnWide, .btn-outline { font-family: var(--font-heading); background: var(--bg); color: var(--primary); border: 1px solid var(--primary); padding: 0.8rem 1.5rem; font-weight: 700; display: inline-block; cursor: pointer; text-transform: uppercase; box-shadow: 4px 4px 0px var(--primary); transition: 0.1s; }
     .btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--primary); }
+    .btnWide { width: 100%; text-align: center; }
 
     /* =========================================
        MODULES: TRACKLIST & LYRICS TERMINAL 
@@ -138,42 +139,49 @@
       100% { transform: translate(0) }
     }
 
-    /* LYRICS TERMINAL */
+    /* LYRICS TERMINAL (FIXED) */
     .lyrics-container {
+      position: relative;
       height: 450px;
+      background: #000;
+      overflow: hidden; /* Keeps the overlay fixed */
+    }
+    
+    /* CRT Scanline effect (Fixed position overlay) */
+    .crt-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 10;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
+
+    /* Scrollable Inner Content */
+    .lyrics-scroll {
+      height: 100%;
       overflow-y: auto;
       padding: 20px;
-      background: #000;
       color: var(--primary);
       font-size: 13px;
       line-height: 1.8;
       white-space: pre-wrap;
       position: relative;
-    }
-    
-    /* CRT Scanline effect */
-    .lyrics-container::after {
-      content: " ";
-      display: block;
-      position: absolute;
-      top: 0; left: 0; bottom: 0; right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-      z-index: 2;
-      background-size: 100% 2px, 3px 100%;
-      pointer-events: none;
+      z-index: 1;
     }
 
-    .lyrics-container::-webkit-scrollbar { width: 8px; }
-    .lyrics-container::-webkit-scrollbar-track { background: var(--bg-alt); border-left: 1px solid var(--border); }
-    .lyrics-container::-webkit-scrollbar-thumb { background: var(--primary); }
+    .lyrics-scroll::-webkit-scrollbar { width: 8px; }
+    .lyrics-scroll::-webkit-scrollbar-track { background: var(--bg-alt); border-left: 1px solid var(--border); }
+    .lyrics-scroll::-webkit-scrollbar-thumb { background: var(--primary); }
 
-    .typing-effect {
-      animation: textFlicker 0.1s infinite alternate;
-    }
-    @keyframes textFlicker {
-      0% { opacity: 0.9; text-shadow: 0 0 2px var(--primary); }
-      100% { opacity: 1; text-shadow: 0 0 8px var(--primary); }
-    }
+    .cursor { animation: blink 1s step-end infinite; color: var(--accent); font-weight: bold; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* LAYOUT UTILS */
+    .eventGrid { display: grid; gap: 2rem; margin-top: 2rem; }
+    @media (min-width: 900px) { .eventGrid { grid-template-columns: 1fr 1fr; } }
+    #meetMap { width: 100%; height: 300px; border-radius: 0; z-index: 1; border: 1px solid var(--border); filter: grayscale(100%) invert(90%); }
+    [data-theme="vaporwave"] #meetMap { filter: invert(1) hue-rotate(180deg) contrast(1.2) grayscale(80%); }
 
   </style>
 </head>
@@ -225,7 +233,7 @@
   </div>
 </header>
 
-<!-- =============== TERMINAL MODULE (TRACKLIST & LYRICS) =============== -->
+<!-- =============== TERMINAL MODULE =============== -->
 <section id="terminal" class="section shell split">
   
   <!-- Left Column: Tracklist -->
@@ -249,25 +257,66 @@
     </ul>
   </div>
 
-  <!-- Right Column: Lyrics Terminal -->
+  <!-- Right Column: Lyrics Terminal (FIXED) -->
   <div class="module-window" id="lyrics-module">
     <div class="module-header">
       <span id="lyric-header">DECRYPTING // HERE_DEMO.TXT</span>
       <span class="status-dot" style="background-color: var(--primary); box-shadow: 0 0 10px var(--primary);"></span>
     </div>
-    <div class="lyrics-container" id="lyrics-display">
-      <!-- Lyrics inject here -->
+    <div class="lyrics-container">
+      <div class="crt-overlay"></div>
+      <div class="lyrics-scroll" id="lyrics-display">
+        <!-- JS Types Here -->
+      </div>
     </div>
   </div>
 
 </section>
 
-<!-- ARCHIVE -->
+<!-- =============== ARCHIVE (RESTORED MAP) =============== -->
 <section id="archive" class="section shell card">
   <span class="badge">Live Archive</span>
   <h2 style="font-size: 1.5rem; color: var(--primary);">The Baia Tokyo Set</h2>
   <p class="subtle">Archive: September 19, 2026</p>
-  <p style="margin-top: 1rem;">A relentless live music performance at Baia Tokyo, featuring deep cuts from the 0cross catalog. From coordinating door-splits to pushing the sound system to its absolute limit, the September 19th show solidified the Shibuya presence.</p>
+  
+  <div class="eventGrid">
+    <div class="eventCol">
+      <p style="margin-bottom: 1rem;">A relentless live music performance at Baia Tokyo, featuring deep cuts from the 0cross catalog. From coordinating door-splits to pushing the sound system to its absolute limit, the September 19th show solidified the Shibuya presence.</p>
+      <ul style="list-style: none; padding-left: 0; margin-top: 2rem;">
+        <li style="margin-bottom: 0.5rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Venue:</strong> Baia Tokyo, Shibuya</li>
+        <li style="margin-bottom: 0.5rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Tracks:</strong> Dracula, Battery Drained, Free Plans</li>
+      </ul>
+    </div>
+    <div class="eventCol">
+      <div id="meetMap"></div>
+      <a class="btn btnWide" style="margin-top: 1rem;" href="https://www.google.com/maps/search/?api=1&query=Baia+Tokyo+Shibuya" target="_blank">Boot Map Coord</a>
+    </div>
+  </div>
+</section>
+
+<!-- =============== LOADOUT (RESTORED) =============== -->
+<section id="loadout" class="section shell">
+  <h2 class="headline" style="text-align: center;">Studio Loadout</h2>
+  <div style="text-align: center; margin-bottom: 3rem;"><p class="subtle">The hardware and software powering the noise.</p></div>
+  <div class="card">
+    <span class="badge">Tech Specs</span>
+    <div class="eventGrid" style="margin-top: 0;">
+      <div class="eventCol">
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Primary Sampler:</strong> Teenage Engineering EP-133 K.O. II for chopping loops and drum sequences.</li>
+          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Interface:</strong> Solid State Logic 2 MKII processing the master inputs.</li>
+          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Pedal:</strong> HeadRush VX5 utilized for vocal effects and live looping.</li>
+        </ul>
+      </div>
+      <div class="eventCol">
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>DAWs:</strong> Logic Pro and FL Studio for composition and digital audio editing.</li>
+          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Mobile Comm:</strong> Samsung Galaxy Z Fold 8 & iPhone Air with Smart Glasses.</li>
+          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Handhelds:</strong> Steam Deck OLED, GPD Win 4, Retroid Pocket Nova for emulation downtime.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- FOOTER -->
@@ -295,343 +344,60 @@
   // Swiper Init
   new Swiper('.swiper', { loop: true, autoplay: { delay: 4000, disableOnInteraction: false }, effect: 'fade' });
 
+  // Map Init (Restored and Functional)
+  const mapCenter = [35.6580, 139.7016]; 
+  const map = L.map('meetMap', { scrollWheelZoom: false }).setView(mapCenter, 15);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM' }).addTo(map);
+  L.marker(mapCenter).addTo(map).bindPopup('Baia Tokyo, Shibuya');
+
   // Lyrics Database
   const lyricsDB = [
-    `Rock man
-Got no cash
-Not so fast
-Got no plans
-Plot it to last
-
-Count up the racks
-That's that
-Lotta tasks
-Brought it to max
-Lotta facts don’t matter
-
-Bounce yo ass
-Pound yo glass
-Shot a glance
-At my hag
-I’m enhanced
-
-You up late
-You a fan
-What they say
-On the gram
-No I don't think you’d fathom
-No not after you not bad
-Where you at?
-
-Doubt you’d last, doubt you’d last
-Rock man
-Got no cash
-Where you at?
-Are you with her? Or you slither?
-
-Gotta measure all my bands
-Kinda glad she got no past
-And no rhythm, jus a figment
-
-Bounce your ass
-When you sitting on the glass
-Girl you know I won’t last
-Solitaire
-On my half
-With a gram
-You enhanced
-Your stamina
-Girl you know I’m entranced`,
-
-    `[AURA DEMO LOG]
-> NO LYRICS FOUND
-> INSTRUMENTAL_DATA_ONLY
-> WAITING FOR VOCAL INPUT...`,
-
-    `Cross had to do it to em, snipe
-Hype on the booty
-I bet that lil bitch gon do what I like
-Cross went Judge Judy on that pussy, finna, snipe
-Pantyline hype, tongue
-Tack on numb
-Anti the Christ type
-Running the dyke, run
-I told her sike, doing this shit for fun
-
-She do exactly what I want
-Greater than Gatsby we off the funds
-We tossing hundreds they stay on some ones
-All that shit come to a head, when, it comes to the fuck
-She stay unplugged, babe dont pay me no hush hush
-Sumaho, One, plus plus
-Villain and I got a plush crush
-
-Never had loyalty for anyone, never did anyone given a fuck
-(Sucking the semen, pay me in blood)
-
-Shorty chose to be with a leader
-Staying unloyal, bitch I'm a demon
-Swallow me whole but she spit out the semen
-
-Neimans, sounds like her problem for leaving, ha
-
-My money longer than James Cameron
-Stronger than John Lennon Imagine
-On off the court, straight fundamentals
-And the divorce it aint none of you business
-Speaking of funny bitches
-This shit ain't nothing to me man`,
-
-    `Y’all can die mad, I was born to be here
-Wrote all that up on a four-speed
-Vader go Sith, use the force to bleed em
-Ghost of this bitch still torment me
-You seen I’m up next, so of course you diva
-We just sold out all the floor seats
-Hatchet Man axe it, that’s actually cleaver
-Told that girl, dammit, don't force me
-
-Thought of these goals when I heard I'm in it
-Galaxy Fold, never phone in, we been here
-Someone foretold that I already win it
-Someone to hold, baby, Hare the Krishna
-Already Christian
-Outer the space, how we count down the system
-Okay, I got it now call it autistic
-Autograph sign-in, they signing the missile
-
-Uh, whew!
-This is my life, whew!
-Already told you I don’t take advice
-Diss you my right, dome you I don't need a high price
-Late for the fight
-Taking a vote with the highlights
-Name of the heist
-Live in the moment that I like
-
-Way past cool, woo!
-That’s what I do, yeah
-That's how we move
-Ran in the coop
-See how the past move (Whoa)
-Way too slow, pace too slow
-Pay me like Kuzco
-Secret Wars, that Endgame
-Anthony Russo`,
-
-    `Get it need it hey
-Ran up the beach waves
-Laughin at me, fake
-(Bitch) I don’t need saving
-
-Plan no B, A
-Rap a three way
-That’s my cheap rate
-Mad at me
-Battery drained
-
-Plant a disease
-Planet to free
-Dammit to me too backhanded to see, yuh yuh
-Probably un-add yourself
-Caught you red handed a plant of the seed, laid
-
-All yo bad habits don’t matter to me
-Free all my bad bitches land of the free
-
-You ain’t have to meet Ye
-You just have to be Ye
-
-Granite where my seat lay
-My dawg said you ain’t no freak
-Lets see, let’s see where your teeth lay
-Platinum in a week
-Laughing after words you speak late
-Had bitch after me
-I think all them bastards need to pay
-Blast em in the street`,
-
-    `Melt forever baby
-Melt forever in my arms
-Be the devil tamer
-Ease the trembles in my heart
-
-What do I do?
-Cross off another one
-God bless him doing a stupid phenomenon
-What's left to ruin you? Causing a problem
-Earth to Brent, call cops at Comic Con
-Stop and unsend the text
-Promise a homicide bet
-Hominid red, vamanous
-Federal expressing another one hundred over
-Said I'm the best dressed
-How would they know?
-
-Death threats, let me collect
-Dead text stuck in the drafts
-I'm finna break down to brass tax
-I ain't gon' fish down no tax brackets
-I axe that lil bitch for cash back
-They been ignoring the facts bad
-I'm finna go ahead and pass back
-She said she go with it fast, fast
-
-Melt forever baby
-Melt forever in my arms
-Be the devil tamer
-Ease the trembles in my heart`,
-
-    `Thats not your audience girl
-Try not to promise shit girl
-Give em Omari
-Hari the kari
-End up with all of this girl
-
-I think I’m falling baby girl
-Could have kept all this safe girl
-What did you call me?
-Stick with the progress
-Feminine imminent, sorry
-
-I told her, aw this sick world
-That’s not your audience girl
-Kept her from falling deeper
-I tend to polish it girl
-
-Im in your Audi
-Sick of the sorries
-Nicholas slippin then saving it for me
-In a precarious world
-Sick with the sonnets
-Did it for audience
-
-We in Shibuya it ain’t nothing new to ya, ya
-Pass that charcuterie fill that jacuzzi up
-Bitches tattoo me they’d probably shoot me ya
-Fooly the cooly my life is a movie ya`,
-
-    `Why would you say that to me? Man
-Might go and find what I need, can
-Why wont you say what you mean
-I got everything handed to me
-
-But the truth
-I won’t side with you
-I been tired of rules
-Fates, that you make
-Man do that 'fore its too late
-
-Wobble loose, this my Waterloo
-I won’t cry just hide the truth
-Man If I were you, why would I decide to lose?
-
-Fuck your video game
-Fuck your console
-Fuck what Hideo say
-Fuck your household
-
-We got free plans
-What it do what it do?
-They got three paths
-One for me two for you
-Woo woo!`,
-
-    `Timelines
-Why does the time lie
-Shut me up eyes wide
-Nine lives
-Probably do cardio time flies
-Lifeline
-I wasnt part of yo fine line
-Dont know da code to yo wifi
-Bright eyes
-Gave u the time of ur life life
-Why you been typing those white lies
-Nice try
-Hate that I might be more Christlike
-Shine shine
-
-Time moving on but I slow it
-Every memory stolen
-All eyes on me when I’m zonin
-Movin the posts from the goalie
-
-She laugh like she think know me huh
-Holdin my hand losing focus huh
-Chasin her love like it owe me
-Buyin in high and then sold it low
-
-I cannot tell if it’s heaven
-Or all the lights just playin with me
-You always change like the weather
-Farenheit babe stay here with me`,
-
-    `Fuckin’ hope you happy
-She condone you rappin’
-If they don’t want smoke, they won’t know what happened
-In a cult, so savage
-Out in Seoul, ghost habit
-When he float, coast to coast, up the toast and down it
-
-Said the most (Yeah)
-Run it up the fold (Yeah)
-Under where mold is
-Like my daddy told me
-Okay
-
-Now we gettin’ cozy, yeah
-But I set it cold (Cold)
-Never let a coat, yeah
-Never need a coat
-
-I’ma do my own thang
-I am an adult (Yeah)
-Spittin’ with the dope slang
-Wrote that from the soul, yeah (Oh yeah)
-Oh yeah, we did gold slang
-Yeah, we had it gross
-Yeah
-Overdid the whole thing
-Own it, here we go`,
-
-    `Can’t see you (Got what I need from you)
-Can’t breathe
-Cant please you (Not like you need me to)
-Cant freak
-
-That’s lethal (Now that I think of you)
-Last week
-Act decent
-Cant leave
-
-I free you, (Know you got things to do)
-
-She gotta eat I feast (Sheesh)
-Got me high 3 at least
-Cross eye Nissan leaf
-Lisan al-Gaib
-Shit goes out I sleep
-Freaks out crease on crease
-Leave out all police
-Cop a couple cars they lease
-Crosser hold it down for weeks
-Read back how that seem
-Lisan Al Gaib
-I don’t gotta pay thou fees
-U aint finna pout just leave
-Yea I bought a house y’all lease
-She aint gettin how that reads
-He dont got a crown just heat`
+    `Rock man\nGot no cash\nNot so fast\nGot no plans\nPlot it to last\n\nCount up the racks\nThat's that\nLotta tasks\nBrought it to max\nLotta facts don’t matter\n\nBounce yo ass\nPound yo glass\nShot a glance\nAt my hag\nI’m enhanced\n\nYou up late\nYou a fan\nWhat they say\nOn the gram\nNo I don't think you’d fathom\nNo not after you not bad\nWhere you at?\n\nDoubt you’d last, doubt you’d last\nRock man\nGot no cash\nWhere you at?\nAre you with her? Or you slither?\n\nGotta measure all my bands\nKinda glad she got no past\nAnd no rhythm, jus a figment\n\nBounce your ass\nWhen you sitting on the glass\nGirl you know I won’t last\nSolitaire\nOn my half\nWith a gram\nYou enhanced\nYour stamina\nGirl you know I’m entranced`,
+    
+    `[AURA DEMO LOG]\n> NO LYRICS FOUND\n> INSTRUMENTAL_DATA_ONLY\n> WAITING FOR VOCAL INPUT...`,
+    
+    `Cross had to do it to em, snipe\nHype on the booty\nI bet that lil bitch gon do what I like\nCross went Judge Judy on that pussy, finna, snipe\nPantyline hype, tongue\nTack on numb\nAnti the Christ type\nRunning the dyke, run\nI told her sike, doing this shit for fun\n\nShe do exactly what I want\nGreater than Gatsby we off the funds\nWe tossing hundreds they stay on some ones\nAll that shit come to a head, when, it comes to the fuck\nShe stay unplugged, babe dont pay me no hush hush\nSumaho, One, plus plus\nVillain and I got a plush crush\n\nNever had loyalty for anyone, never did anyone given a fuck\n(Sucking the semen, pay me in blood)\n\nShorty chose to be with a leader\nStaying unloyal, bitch I'm a demon\nSwallow me whole but she spit out the semen\n\nNeimans, sounds like her problem for leaving, ha\n\nMy money longer than James Cameron\nStronger than John Lennon Imagine\nOn off the court, straight fundamentals\nAnd the divorce it aint none of you business\nSpeaking of funny bitches\nThis shit ain't nothing to me man`,
+    
+    `Y’all can die mad, I was born to be here\nWrote all that up on a four-speed\nVader go Sith, use the force to bleed em\nGhost of this bitch still torment me\nYou seen I’m up next, so of course you diva\nWe just sold out all the floor seats\nHatchet Man axe it, that’s actually cleaver\nTold that girl, dammit, don't force me\n\nThought of these goals when I heard I'm in it\nGalaxy Fold, never phone in, we been here\nSomeone foretold that I already win it\nSomeone to hold, baby, Hare the Krishna\nAlready Christian\nOuter the space, how we count down the system\nOkay, I got it now call it autistic\nAutograph sign-in, they signing the missile\n\nUh, whew!\nThis is my life, whew!\nAlready told you I don’t take advice\nDiss you my right, dome you I don't need a high price\nLate for the fight\nTaking a vote with the highlights\nName of the heist\nLive in the moment that I like\n\nWay past cool, woo!\nThat’s what I do, yeah\nThat's how we move\nRan in the coop\nSee how the past move (Whoa)\nWay too slow, pace too slow\nPay me like Kuzco\nSecret Wars, that Endgame\nAnthony Russo`,
+    
+    `Get it need it hey\nRan up the beach waves\nLaughin at me, fake\n(Bitch) I don’t need saving\n\nPlan no B, A\nRap a three way\nThat’s my cheap rate\nMad at me\nBattery drained\n\nPlant a disease\nPlanet to free\nDammit to me too backhanded to see, yuh yuh\nProbably un-add yourself\nCaught you red handed a plant of the seed, laid\n\nAll yo bad habits don’t matter to me\nFree all my bad bitches land of the free\n\nYou ain’t have to meet Ye\nYou just have to be Ye\n\nGranite where my seat lay\nMy dawg said you ain’t no freak\nLets see, let’s see where your teeth lay\nPlatinum in a week\nLaughing after words you speak late\nHad bitch after me\nI think all them bastards need to pay\nBlast em in the street`,
+    
+    `Melt forever baby\nMelt forever in my arms\nBe the devil tamer\nEase the trembles in my heart\n\nWhat do I do?\nCross off another one\nGod bless him doing a stupid phenomenon\nWhat's left to ruin you? Causing a problem\nEarth to Brent, call cops at Comic Con\nStop and unsend the text\nPromise a homicide bet\nHominid red, vamanous\nFederal expressing another one hundred over\nSaid I'm the best dressed\nHow would they know?\n\nDeath threats, let me collect\nDead text stuck in the drafts\nI'm finna break down to brass tax\nI ain't gon' fish down no tax brackets\nI axe that lil bitch for cash back\nThey been ignoring the facts bad\nI'm finna go ahead and pass back\nShe said she go with it fast, fast\n\nMelt forever baby\nMelt forever in my arms\nBe the devil tamer\nEase the trembles in my heart`,
+    
+    `Thats not your audience girl\nTry not to promise shit girl\nGive em Omari\nHari the kari\nEnd up with all of this girl\n\nI think I’m falling baby girl\nCould have kept all this safe girl\nWhat did you call me?\nStick with the progress\nFeminine imminent, sorry\n\nI told her, aw this sick world\nThat’s not your audience girl\nKept her from falling deeper\nI tend to polish it girl\n\nIm in your Audi\nSick of the sorries\nNicholas slippin then saving it for me\nIn a precarious world\nSick with the sonnets\nDid it for audience\n\nWe in Shibuya it ain’t nothing new to ya, ya\nPass that charcuterie fill that jacuzzi up\nBitches tattoo me they’d probably shoot me ya\nFooly the cooly my life is a movie ya`,
+    
+    `Why would you say that to me? Man\nMight go and find what I need, can\nWhy wont you say what you mean\nI got everything handed to me\n\nBut the truth\nI won’t side with you\nI been tired of rules\nFates, that you make\nMan do that 'fore its too late\n\nWobble loose, this my Waterloo\nI won’t cry just hide the truth\nMan If I were you, why would I decide to lose?\n\nFuck your video game\nFuck your console\nFuck what Hideo say\nFuck your household\n\nWe got free plans\nWhat it do what it do?\nThey got three paths\nOne for me two for you\nWoo woo!`,
+    
+    `Timelines\nWhy does the time lie\nShut me up eyes wide\nNine lives\nProbably do cardio time flies\nLifeline\nI wasnt part of yo fine line\nDont know da code to yo wifi\nBright eyes\nGave u the time of ur life life\nWhy you been typing those white lies\nNice try\nHate that I might be more Christlike\nShine shine\n\nTime moving on but I slow it\nEvery memory stolen\nAll eyes on me when I’m zonin\nMovin the posts from the goalie\n\nShe laugh like she think know me huh\nHoldin my hand losing focus huh\nChasin her love like it owe me\nBuyin in high and then sold it low\n\nI cannot tell if it’s heaven\nOr all the lights just playin with me\nYou always change like the weather\nFarenheit babe stay here with me`,
+    
+    `Fuckin’ hope you happy\nShe condone you rappin’\nIf they don’t want smoke, they won’t know what happened\nIn a cult, so savage\nOut in Seoul, ghost habit\nWhen he float, coast to coast, up the toast and down it\n\nSaid the most (Yeah)\nRun it up the fold (Yeah)\nUnder where mold is\nLike my daddy told me\nOkay\n\nNow we gettin’ cozy, yeah\nBut I set it cold (Cold)\nNever let a coat, yeah\nNever need a coat\n\nI’ma do my own thang\nI am an adult (Yeah)\nSpittin’ with the dope slang\nWrote that from the soul, yeah (Oh yeah)\nOh yeah, we did gold slang\nYeah, we had it gross\nYeah\nOverdid the whole thing\nOwn it, here we go`,
+    
+    `Can’t see you (Got what I need from you)\nCan’t breathe\nCant please you (Not like you need me to)\nCant freak\n\nThat’s lethal (Now that I think of you)\nLast week\nAct decent\nCant leave\n\nI free you, (Know you got things to do)\n\nShe gotta eat I feast (Sheesh)\nGot me high 3 at least\nCross eye Nissan leaf\nLisan al-Gaib\nShit goes out I sleep\nFreaks out crease on crease\nLeave out all police\nCop a couple cars they lease\nCrosser hold it down for weeks\nRead back how that seem\nLisan Al Gaib\nI don’t gotta pay thou fees\nU aint finna pout just leave\nYea I bought a house y’all lease\nShe aint gettin how that reads\nHe dont got a crown just heat`
   ];
 
-  // Module Interaction Logic
+  // Module Interaction Logic & Real Typewriter Effect
   const tracks = document.querySelectorAll('.track');
   const display = document.getElementById('lyrics-display');
   const lyricHeader = document.getElementById('lyric-header');
+  let typeInterval;
+
+  function typeWriter(text, element, speed = 10) {
+    element.innerHTML = '<span id="type-text"></span><span class="cursor">_</span>';
+    const textSpan = document.getElementById('type-text');
+    let i = 0;
+    clearInterval(typeInterval);
+    typeInterval = setInterval(() => {
+      if (i < text.length) {
+        textSpan.innerHTML += text.charAt(i);
+        i++;
+      } else {
+        clearInterval(typeInterval);
+      }
+    }, speed);
+  }
 
   // Load first track initially
-  display.innerHTML = `<div class="typing-effect">${lyricsDB[0]}</div>`;
+  typeWriter(lyricsDB[0], display);
 
   tracks.forEach(track => {
     track.addEventListener('click', function() {
@@ -646,14 +412,8 @@ He dont got a crown just heat`
       // Update header
       lyricHeader.innerText = `DECRYPTING // ${trackName}.TXT`;
       
-      // Clear and type effect
-      display.innerHTML = '';
-      
-      // Simulate quick terminal parse
-      setTimeout(() => {
-        display.innerHTML = `<div class="typing-effect">${lyricsDB[trackId]}</div>`;
-        display.scrollTop = 0;
-      }, 50);
+      // Run the actual typing animation
+      typeWriter(lyricsDB[trackId], display);
     });
   });
 </script>

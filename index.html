@@ -1,142 +1,466 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="vaporwave">
 <head>
-<meta charset="UTF-8">
-<title>Villainous Brand // Tokyo</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="/favicon.png" />
-<meta property="og:title" content="Villainous Brand - Tokyo Underground Fashion" />
-<meta property="og:description" content="Glitch gospel & cyber-punk streetwear drops. Join the villain club." />
-<meta property="og:image" content="https://villain0.us/og.png" />
-<meta name="twitter:card" content="summary_large_image" />
-<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.css" />
-<style>
- @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
- * { box-sizing: border-box; }
- html, body { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Space Mono', monospace; overflow-x: hidden; }
- a { color: #0ff; text-decoration: none; }
- .wrapper { position: relative; z-index: 1; padding: 0 1rem; max-width: 1400px; margin: 0 auto; }
- 
- /* TITLE STACK */
- .title-stack { padding-top: 10vh; text-align: center; font-size: 5vw; line-height: 1.2em; font-weight: 400; letter-spacing: -2px; }
- .huge-now { font-size: 14vw; line-height: 0.9em; text-align: center; font-weight: 700; color: #000; -webkit-text-stroke: 1px #0ff; text-shadow: 0 0 15px rgba(0, 255, 255, 0.4); margin-bottom: 3rem; }
- 
- /* PRODUCT GRID - 1px neon strokes, tactical spread */
- .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1px; background: #0ff; border: 1px solid #0ff; margin: 2rem 0; }
- .product { background: #000; padding: 2rem 1rem; text-align: center; position: relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
- .product h3 { margin-top: 0; font-size: 1.2rem; font-weight: 400; letter-spacing: 2px; color: #fff; }
- .product img { max-width: 100%; height: auto; display: block; margin: 1rem auto; filter: grayscale(100%); transition: filter 0.3s ease; }
- .product:hover img { filter: grayscale(0%); }
- 
- /* BUY BUTTON - Brutalist mechanical punch */
- .buy { margin-top: 2rem; border: 1px solid #0ff; background: #000; color: #0ff; padding: 0.8rem 2.5rem; font-family: inherit; font-size: 1rem; cursor: pointer; transition: transform 0.05s ease, background 0.1s, color 0.1s; letter-spacing: 2px; outline: none; }
- .buy:hover { background: rgba(0, 255, 255, 0.1); }
- .buy:active { transform: translateY(4px); background: #0ff; color: #000; }
- 
- /* MARQUEE (Replaced Info Boxes) */
- .marquee-container { width: 100vw; max-width: 100%; border-top: 1px solid #0ff; border-bottom: 1px solid #0ff; overflow: hidden; white-space: nowrap; padding: 1.5rem 0; margin: 4rem 0; background: #000; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; }
- .marquee-scroll { display: inline-block; white-space: nowrap; animation: marquee 12s linear infinite; font-size: 1.2rem; font-weight: 700; color: #0f0; letter-spacing: 3px; }
- @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
- 
- /* ABOUT */
- .about { margin: 2rem auto 6rem; text-align: center; font-size: 1rem; max-width: 700px; padding: 0 1rem; color: #888; line-height: 1.8; font-weight: 400; }
- footer { text-align: center; color: #444; font-size: 0.8rem; padding-bottom: 3rem; letter-spacing: 1px; border-top: 1px solid #222; padding-top: 2rem; }
- 
- @media(max-width: 600px) {
-  .title-stack { font-size: 8vw; }
-  .huge-now { font-size: 20vw; }
- }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>0CROSS // ZERO CROSSING FANDOM</title>
+
+  <!-- Fonts: Clean Editorial + Futuristic Orbitron for Night Mode -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800&family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <!-- Swiper / Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    :root {
+      --bg: #F9F8F6; --bg-alt: #FFFFFF; --ink: #111; --muted: #555;
+      --primary: #ff003c; --accent: #00eaff; --card-bg: rgba(255, 255, 255, 0.88);
+      --shadow: 10px 10px 0px rgba(255, 0, 60, 0.1); --border: #333;
+      --r: 0px; --content-max: 1080px; --h2: clamp(1.8rem, 4vw, 2.5rem); --scroll-offset: 70px;
+      --font-body: 'Space Mono', monospace; --font-heading: 'Orbitron', sans-serif;
+      --topo-line: rgba(0, 234, 255, 0.1); --trail-base: rgba(255, 0, 60, 0.25);
+      --trail-pulse: #ff003c; --mountain-wire: rgba(0, 234, 255, 0.1); --sun-fill: rgba(0, 234, 255, 0.15);
+    }
+    [data-theme="vaporwave"] {
+      --bg: #050505; --bg-alt: #111; --ink: #f0f0f5; --muted: #888;
+      --primary: #00ff64; --accent: #ff003c; --card-bg: #0a0a0a;
+      --shadow: 5px 5px 0px rgba(0, 255, 100, 0.2);
+      --border: #333; --font-heading: 'Orbitron', sans-serif;
+      --topo-line: rgba(0, 255, 100, 0.18); --trail-base: rgba(255, 0, 60, 0.25);
+      --trail-pulse: #00ff64; --mountain-wire: rgba(255, 0, 60, 0.32); --sun-fill: #00ff64;
+    }
+    :root[lang="en"] .ja { display: none !important; }
+    :root[lang="ja"] .en { display: none !important; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); color: var(--ink); background-color: var(--bg); -webkit-font-smoothing: antialiased; line-height: 1.6; transition: background-color 0.5s ease, color 0.5s ease; overflow-x: hidden; position: relative; }
+    
+    [data-theme="vaporwave"] body, [data-theme="vaporwave"] p, [data-theme="vaporwave"] li, [data-theme="vaporwave"] span {
+      text-shadow: 0 0 2px rgba(0, 255, 100, 0.25);
+    }
+
+    h1, h2, h3, .serif { font-family: var(--font-heading); transition: color 0.3s ease; }
+    h1, h2, .headline { text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; text-shadow: 2px 2px 0px var(--accent); }
+    a { color: inherit; text-decoration: none; transition: 0.3s; }
+    img { max-width: 100%; display: block; height: auto; border-radius: 0px; filter: grayscale(100%); }
+    img:hover { filter: grayscale(0%); transition: 0.3s; }
+    [id] { scroll-margin-top: var(--scroll-offset); }
+    
+    .trail-backdrop { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1; overflow: hidden; opacity: 0.9; transition: opacity 0.5s ease; }
+    .trail-svg { width: 100%; height: 100%; object-fit: cover; }
+    .trail-pulse { stroke-dasharray: 14 26; animation: climbAscent 2.4s linear infinite; }
+    @keyframes climbAscent { from { stroke-dashoffset: 80; } to { stroke-dashoffset: 0; } }
+    .waypoint-ping { animation: pingGlow 2s ease-in-out infinite alternate; }
+    @keyframes pingGlow { from { r: 5px; opacity: 0.6; } to { r: 10px; opacity: 1; } }
+
+    .hero-mountains, .footer-mountains {
+      width: 100%; height: 25vh; pointer-events: none; overflow: visible; display: block;
+    }
+    
+    /* MICKEY THE POODLE MASCOT */
+    .turtle-wrapper { position: fixed; width: 80px; z-index: 4; pointer-events: none; top: -200px; left: -200px; transform: translate(-50%, -50%); }
+    .turtle-img { width: 100%; height: auto; cursor: pointer; pointer-events: auto; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.8)); transition: filter 0.5s ease; border-radius: 50%; border: 2px solid var(--primary); }
+    [data-theme="vaporwave"] .turtle-img { filter: drop-shadow(0 0 15px var(--accent)); }
+    @keyframes turtleBackflip { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-100px) rotate(-180deg); } 100% { transform: translateY(0) rotate(-360deg); } }
+    .do-backflip { animation: turtleBackflip 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+    
+    .turtle-speech { position: absolute; bottom: 90px; left: 50%; background: var(--bg-alt); color: var(--primary); padding: 0.75rem 1rem; border-radius: 0; font-size: 0.8rem; font-weight: 800; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); opacity: 0; transform: translateX(-50%) translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; width: max-content; pointer-events: none; text-transform: uppercase; }
+    .turtle-speech.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    
+    .toko-container { position: absolute; bottom: -20px; left: 50%; width: 100px; margin-left: -50px; display: flex; justify-content: space-between; font-family: var(--font-heading); font-size: 0.65rem; font-weight: 800; color: var(--accent); pointer-events: none; }
+    .toko { opacity: 0; animation: tokoFlash 5s ease-in-out infinite; }
+    .toko.left { --rot: -8deg; animation-delay: 0s; }
+    .toko.right { --rot: 8deg; animation-delay: 2.5s; }
+    @keyframes tokoFlash { 0%, 10% { opacity: 0; transform: translateY(2px) scale(0.95) rotate(var(--rot)); } 20%, 40% { opacity: 0.6; transform: translateY(0) scale(1) rotate(var(--rot)); } 50%, 100% { opacity: 0; transform: translateY(2px) scale(0.95) rotate(var(--rot)); } }
+
+    #siteNav, #mobileMenu, header, section, footer { transition: opacity 1s ease; }
+    body.cinema-mode #siteNav, body.cinema-mode #mobileMenu, body.cinema-mode header, body.cinema-mode section, body.cinema-mode footer { opacity: 0 !important; pointer-events: none; }
+
+    .shell { max-width: var(--content-max); margin-inline: auto; padding-inline: clamp(1rem, 4vw, 2rem); }
+    .section { padding: 4rem 0; position: relative; z-index: 2; }
+    .split { display: grid; gap: 3rem; }
+    @media (min-width: 900px) { .split { grid-template-columns: 1fr 1fr; align-items: center; } }
+    
+    .badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 0; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; background: var(--primary); color: #000; margin-bottom: 1rem; border: 1px solid var(--primary); }
+    .headline { font-size: var(--h2); color: var(--primary); line-height: 1.2; margin-bottom: 1.5rem; }
+    .subtle { color: var(--muted); }
+    
+    .card { background: var(--card-bg); border-radius: var(--r); padding: clamp(1.5rem, 3vw, 2.5rem); box-shadow: var(--shadow); border: 1px solid var(--border); backdrop-filter: blur(14px); }
+
+    .btn, .btnWide, .btn-outline { font-style: normal; font-family: var(--font-heading); }
+    .btn, .btnWide { background: var(--bg); color: var(--primary); border: 1px solid var(--primary); padding: 0.8rem 1.5rem; font-weight: 700; display: inline-block; transition: all 0.1s ease; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 4px 4px 0px var(--primary); }
+    .btn:active, .btnWide:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--primary); }
+    .btnWide { width: 100%; text-align: center; padding: 1rem; }
+    .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); box-shadow: 4px 4px 0px var(--accent); }
+    .btn-outline:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--accent); }
+
+    nav { position: fixed; top: 0; left: 0; width: 100%; background: var(--bg-alt); border-bottom: 1px solid var(--border); z-index: 120; transition: all 0.3s ease; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--scroll-offset); padding: 0 clamp(1rem, 4vw, 2rem); position: relative; }
+    .brand { display: flex; align-items: center; gap: 0.8rem; font-weight: 800; font-size: 1.2rem; z-index: 2; transition: color 0.3s ease; cursor: pointer; font-family: var(--font-heading); color: var(--primary); }
+    .links { display: none; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; }
+    .links a { color: var(--muted); position: relative; padding: 0 10px; }
+    .links a:hover { color: var(--accent); text-shadow: 2px 2px 0px rgba(255,0,60,0.5); }
+    .actions { display: none; gap: 1rem; align-items: center; z-index: 2; }
+    @media (min-width: 900px) { .links { display: flex; gap: 1.5rem; position: absolute; left: 50%; transform: translateX(-50%); } .actions { display: flex; align-items: center; } #menuBtn { display: none; } }
+    #themeToggle { font-size: 1.2rem; cursor: pointer; background: none; border: none; transition: transform 0.3s; margin-right: 0.5rem; }
+    .brand-text-match { background: none; border: none; cursor: pointer; margin-right: 0.5rem; transition: 0.3s; font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem; color: var(--primary); }
+    .hamburger { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 4px; padding: 0.5rem; z-index: 2; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--primary); transition: 0.3s; }
+    .mobileMenu { position: fixed; top: var(--scroll-offset); left: 0; width: 100%; background: var(--bg-alt); padding: 2rem; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 1.5rem; text-align: center; transform: translateY(-100%); opacity: 0; visibility: hidden; transition: 0.3s; z-index: 100; }
+    nav.open .mobileMenu { transform: translateY(0); opacity: 1; visibility: visible; }
+
+    header { margin-top: var(--scroll-offset); height: 75vh; position: relative; z-index: 2; border-bottom: 1px solid var(--border); }
+    .swiper { width: 100%; height: 100%; background: #000; }
+    .swiper-slide { display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, var(--bg-alt) 0%, #000 100%); font-family: var(--font-heading); color: var(--primary); font-size: 3vw; letter-spacing: 5px; opacity: 0.2; }
+    
+    .heroOverlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 5; padding: 1rem; color: var(--primary); background: radial-gradient(circle, transparent 20%, var(--bg) 100%); }
+    .heroOverlay h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 1rem; color: var(--bg); -webkit-text-stroke: 2px var(--primary); text-shadow: 4px 4px 0px var(--accent); }
+    .heroOverlay p { font-size: 1.2rem; max-width: 600px; margin-bottom: 2rem; font-family: var(--font-body); color: var(--muted); }
+
+    .eventGrid { display: grid; gap: 2rem; margin-top: 2rem; }
+    @media (min-width: 900px) { .eventGrid { grid-template-columns: 1fr 1fr; } }
+    .eventCol ul { list-style: none; margin-bottom: 1.5rem; }
+    .eventCol li { margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; }
+    .eventCol li::before { content: ">"; color: var(--accent); position: absolute; left: 0; font-size: 0.9rem; top: 1px; font-weight: 800; }
+    #meetMap { width: 100%; height: 300px; border-radius: 0; z-index: 1; border: 1px solid var(--border); filter: grayscale(100%) invert(90%); }
+    [data-theme="vaporwave"] #meetMap { filter: invert(1) hue-rotate(180deg) contrast(1.2) grayscale(80%); }
+
+    .staffGrid { display: flex; flex-wrap: nowrap; gap: 1.5rem; justify-content: flex-start; margin-top: 2rem; padding-bottom: 1.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
+    @media (min-width: 800px) { .staffGrid { justify-content: center; overflow-x: visible; } }
+    .staffGrid::-webkit-scrollbar { display: none; }
+    .cardStaff { flex: 0 0 auto; text-align: center; scroll-snap-align: center; width: 120px; }
+    .cardStaff .avatar { width: 75px; height: 75px; border-radius: 50%; margin: 0 auto 0.8rem; border: 2px solid var(--primary); background: var(--bg-alt); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-family: var(--font-heading); color: var(--accent); }
+    .cardStaff .name { font-weight: 800; color: var(--primary); font-family: var(--font-heading); font-size: 1rem; line-height: 1.2; }
+    .cardStaff .chip { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    footer { position: relative; z-index: 2; background: var(--bg-alt); color: var(--primary); text-align: center; padding: 2rem; font-size: 0.9rem; border-top: 1px solid var(--border); font-family: var(--font-heading); font-weight: 800; letter-spacing: 0.1em; }
+  </style>
 </head>
-<body>
-<!-- Snipcart -->
-<div hidden id="snipcart" data-api-key="YOUR_PUBLIC_API_KEY" data-currency="JPY"></div>
-<script async src="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.js"></script>
-<audio id="bgTrack" src="https://0x.villain0.us/heavenearth%20(mixed).mp3" preload="auto"></audio>
+<body lang="en">
 
-<div class="wrapper">
-  <div class="title-stack">YOUR VILLAIN<br>ARC STARTS</div>
-  <div class="huge-now">NOW</div>
-
-  <section class="product-grid">
-    <div class="product" data-label="HAT">
-      <h3>TACOS</h3>
-      <img src="image.png" alt="Hat">
-      <button class="buy snipcart-add-item" data-item-id="tacos-hat" data-item-price="666" data-item-url="https://villain0.us" data-item-image="image.png" data-item-name="HAT">BUY</button>
-    </div>
-    <div class="product" data-label="SHIRT">
-      <h3>VILLAIN</h3>
-      <img src="image2.png" alt="Shirt">
-      <button class="buy snipcart-add-item" data-item-id="villain-shirt" data-item-price="666" data-item-url="https://villain0.us" data-item-image="image2.png" data-item-name="SHIRT">BUY</button>
-    </div>
-    <div class="product" data-label="SHIRT">
-      <h3>RAPTURE</h3>
-      <img src="image3.png" alt="Rapture">
-      <button class="buy snipcart-add-item" data-item-id="rapture-shirt" data-item-price="666" data-item-url="https://villain0.us" data-item-image="image3.png" data-item-name="SHIRT">BUY</button>
-    </div>
-  </section>
+<!-- =============== BACKGROUND AUDIO WAVEFORM =============== -->
+<div class="trail-backdrop" aria-hidden="true">
+  <svg class="trail-svg" viewBox="0 0 1440 1000" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+    <!-- Geometric Audio Grid / Studio Vibe -->
+    <path d="M 0,300 L 1440,300 M 0,500 L 1440,500 M 0,700 L 1440,700" stroke="var(--mountain-wire)" stroke-width="1" stroke-dasharray="4 4" />
+    <path d="M 300,0 L 300,1000 M 720,0 L 720,1000 M 1140,0 L 1140,1000" stroke="var(--mountain-wire)" stroke-width="1" stroke-dasharray="4 4" />
+    
+    <!-- The Master Fader Waveform Path -->
+    <path id="audioWaveform" d="M 0,900 L 150,850 L 200,900 L 300,600 L 400,800 L 500,400 L 600,750 L 720,200 L 800,800 L 900,500 L 1000,900 L 1100,700 L 1250,900 L 1440,900" fill="none" stroke="var(--trail-base)" stroke-width="4" stroke-linejoin="miter" />
+    <path d="M 0,900 L 150,850 L 200,900 L 300,600 L 400,800 L 500,400 L 600,750 L 720,200 L 800,800 L 900,500 L 1000,900 L 1100,700 L 1250,900 L 1440,900" fill="none" stroke="var(--trail-pulse)" stroke-width="3" stroke-linejoin="miter" filter="url(#neonGlow)" class="trail-pulse" />
+  </svg>
 </div>
 
-<div class="marquee-container">
-  <div class="marquee-scroll">
-    <span>FREE STICKERS WITH EVERY ORDER // 🤘💀🤖🧷👾 JOIN THE VILLAIN CLUB 🦾🧨☠️🕸️👁️‍🗨️ // FREE STICKERS WITH EVERY ORDER // 🤘💀🤖🧷👾 JOIN THE VILLAIN CLUB 🦾🧨☠️🕸️👁️‍🗨️ // </span>
+<!-- =============== MICKEY MASCOT =============== -->
+<div class="turtle-wrapper" id="mascotWrapper">
+  <div class="turtle-speech" id="turtleSpeech"></div>
+  <div id="turtleFlipWrap">
+    <!-- Using a placeholder for Mickey the Black Toy Poodle -->
+    <div class="turtle-img" id="mascotImg" style="width: 80px; height: 80px; background: #000; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 0 20px var(--accent);">
+      🐕‍🦺
+    </div>
+  </div>
+  <div class="toko-container" id="tokoContainer">
+    <span class="toko left">ミッキー</span>
+    <span class="toko right">ミッキー</span>
   </div>
 </div>
 
-<div class="wrapper">
-  <div class="about">
-    Born in Tokyo & brewed in chaos. We fuse cyberpunk signal flow, street-zine aesthetics & glitch gospel into wearable rebellion. Every drop is a riot, every sticker a key. Plug in and stay villain.
+<!-- =============== NAV =============== -->
+<nav id="siteNav">
+  <div class="nav-inner">
+    <div class="brand" id="brandLogo">
+      <span class="en">0CROSS_OS</span>
+      <span class="ja">ゼロクロッシング</span>
+    </div>
+    <div class="links">
+      <a href="#lore"><span class="en">Lore</span><span class="ja">ロア</span></a>
+      <a href="#archive"><span class="en">Live Archive</span><span class="ja">ライブ</span></a>
+      <a href="#loadout"><span class="en">Loadout</span><span class="ja">機材</span></a>
+      <a href="#factions"><span class="en">Factions</span><span class="ja">ファクション</span></a>
+    </div>
+    <div class="actions">
+      <button id="langToggle" aria-label="Toggle Language" class="brand-text-match">JP</button>
+      <button id="themeToggle" aria-label="Toggle Night Mode">⬛</button>
+      <a class="btn" href="https://github.com/v1llain0us"><span class="en">Connect</span><span class="ja">接続</span></a>
+    </div>
+    <button id="menuBtn" class="hamburger"><span></span><span></span><span></span></button>
   </div>
-</div>
-<footer>&copy; 2026 Villainous Brand / Outer Heaven</footer>
+  <div id="mobileMenu" class="mobileMenu">
+    <a href="#lore"><span class="en">Lore</span><span class="ja">ロア</span></a>
+    <a href="#archive"><span class="en">Live Archive</span><span class="ja">ライブ</span></a>
+    <a href="#loadout"><span class="en">Loadout</span><span class="ja">機材</span></a>
+    <a href="#factions"><span class="en">Factions</span><span class="ja">ファクション</span></a>
+    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+      <button id="langToggleMobile" class="brand-text-match" style="flex: 1; text-align: center;">JP</button>
+      <button id="themeToggleMobile" class="btn-outline" style="padding: 0.8rem; font-size: 1.2rem; flex: 1;">⬛</button>
+    </div>
+  </div>
+</nav>
+
+<!-- =============== HERO =============== -->
+<header id="hero">
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">WAY PAST COOL</div>
+      <div class="swiper-slide">LISAN AL GAIB</div>
+      <div class="swiper-slide">DRACULA</div>
+    </div>
+    <div class="heroOverlay">
+      <h1 id="heroTitle"><span class="en">VICIOUS.</span><span class="ja">悪意。</span><br><span class="en">NOT VISCOUS.</span><span class="ja">粘着質ではない。</span></h1>
+      <p id="heroSub"><span class="en">The Official 0CROSS Fandom Archive</span><span class="ja">公式ゼロクロッシング・アーカイブ</span></p>
+      <a href="#archive" class="btn"><span class="en">Boot Up</span><span class="ja">起動する</span></a>
+    </div>
+  </div>
+</header>
+
+<!-- =============== LORE =============== -->
+<section id="lore" class="section shell split">
+  <div class="mission-text">
+    <span class="badge"><span class="en">The Protocol</span><span class="ja">プロトコル</span></span>
+    <h2 class="headline"><span class="en">Melt Forever</span><span class="ja">メルト・フォーエバー</span></h2>
+    <p><span class="en">Originating from the Shibuya underground, <strong>0CROSS</strong> (ゼロクロッシング) is a rap and electronic audio project completely engineered from top to bottom. No corporate backing, no soft landings. Just glitch aesthetics and heavy bass lines.</span><span class="ja">渋谷のアンダーグラウンドから発信される<strong>0CROSS</strong>（ゼロクロッシング）は、すべてが自作でエンジニアリングされたラップとエレクトロニックのオーディオプロジェクトです。企業の後ろ盾もなく、ソフトな着地もありません。グリッチな美学とヘビーなベースラインがあるのみです。</span></p>
+    <p><span class="en">From the lyrical precision of <em>Way Past Cool</em> to the distorted reality of <em>Lisan Al Gaib</em>, this space archives the beats, the shows, and the hardware that makes the noise.</span><span class="ja">「Way Past Cool」の叙情的な正確さから、「Lisan Al Gaib」の歪んだ現実まで、この空間はビート、ライブ、そしてノイズを生み出すハードウェアをアーカイブしています。</span></p>
+    <a class="btn btn-outline" style="margin-top: 1rem;" href="#"><span class="en">Read the Manifest</span><span class="ja">マニフェストを読む</span></a>
+  </div>
+  <div>
+    <!-- Placeholder for cover art -->
+    <div style="width: 100%; aspect-ratio: 1; background: repeating-linear-gradient(45deg, #000, #000 10px, var(--primary) 10px, var(--primary) 20px); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); color: #fff; font-size: 2rem; background-blend-mode: overlay;">
+      [AURA DEMO]
+    </div>
+  </div>
+</section>
+
+<!-- =============== ARCHIVE (EVENTS) =============== -->
+<section id="archive" class="section shell card">
+  <span class="badge"><span class="en">Live Archive</span><span class="ja">ライブ・アーカイブ</span></span>
+  <h2 class="headline"><span class="en">The Baia Tokyo Set</span><span class="ja">Baia Tokyo セット</span></h2>
+  <p class="subtle"><span class="en">Archive: September 19, 2026</span><span class="ja">アーカイブ：2026年9月19日</span></p>
+  <div class="eventGrid">
+    <div class="eventCol">
+      <p><span class="en">A relentless live music performance at Baia Tokyo, featuring deep cuts from the 0cross catalog. From coordinating door-splits to pushing the sound system to its absolute limit, the September 19th show solidified the Shibuya presence.</span><span class="ja">Baia Tokyoで行われた、ゼロクロスのカタログからディープな楽曲を披露した容赦ないライブパフォーマンス。9月19日のショーは、渋谷での存在感を決定づけました。</span></p>
+      <br><h3><span class="en">Set Details</span><span class="ja">セット詳細</span></h3>
+      <ul>
+        <li><span class="en"><strong>Venue:</strong> Baia Tokyo, Shibuya</span><span class="ja"><strong>会場:</strong> Baia Tokyo, 渋谷</span></li>
+        <li><span class="en"><strong>Tracks:</strong> Dracula, Battery Drained, Free Plans</span><span class="ja"><strong>トラック:</strong> Dracula, Battery Drained, Free Plans</span></li>
+        <li><span class="en"><strong>Prior Gig:</strong> March 24th @ 阿佐ヶ谷DRIFT</span><span class="ja"><strong>前回のライブ:</strong> 3月24日 @ 阿佐ヶ谷DRIFT</span></li>
+      </ul>
+      <p class="subtle" style="font-size: 0.85rem;"><span class="en">Note: Mickey the poodle was not allowed on the dancefloor.</span><span class="ja">注記：トイプードルのミッキーはダンスフロアに入れませんでした。</span></p>
+    </div>
+    <div class="eventCol">
+      <div id="meetMap"></div>
+      <a class="btn btnWide" style="margin-top: 1rem;" href="https://www.google.com/maps/search/?api=1&query=Baia+Tokyo+Shibuya" target="_blank"><span class="en">Boot Map Coord</span><span class="ja">マップ座標を起動</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- =============== LOADOUT =============== -->
+<section id="loadout" class="section shell">
+  <h2 class="headline" style="text-align: center;"><span class="en">Studio Loadout</span><span class="ja">スタジオ機材</span></h2>
+  <div style="text-align: center; margin-bottom: 3rem;"><p class="subtle"><span class="en">The hardware and software powering the noise.</span><span class="ja">ノイズを生み出すハードウェアとソフトウェア。</span></p></div>
+  <div class="card">
+    <span class="badge"><span class="en">Tech Specs</span><span class="ja">スペック</span></span>
+    <div class="eventGrid" style="margin-top: 0;">
+      <div class="eventCol">
+        <ul>
+          <li><span class="en"><strong>Primary Sampler:</strong> Teenage Engineering EP-133 K.O. II for chopping loops and drum sequences.</span><span class="ja"><strong>サンプラー:</strong> Teenage Engineering EP-133 K.O. II</span></li>
+          <li><span class="en"><strong>Interface:</strong> Solid State Logic 2 MKII processing the master inputs.</span><span class="ja"><strong>インターフェース:</strong> Solid State Logic 2 MKII</span></li>
+          <li><span class="en"><strong>Pedal:</strong> HeadRush VX5 utilized for vocal effects and live looping.</span><span class="ja"><strong>ペダル:</strong> HeadRush VX5</span></li>
+        </ul>
+      </div>
+      <div class="eventCol">
+        <ul>
+          <li><span class="en"><strong>DAWs:</strong> Logic Pro and FL Studio for composition and digital audio editing.</span><span class="ja"><strong>DAW:</strong> Logic Pro & FL Studio</span></li>
+          <li><span class="en"><strong>Mobile Comm:</strong> Samsung Galaxy Z Fold 8 & iPhone Air with Smart Glasses.</span><span class="ja"><strong>通信機器:</strong> Galaxy Z Fold 8 & iPhone Air</span></li>
+          <li><span class="en"><strong>Handhelds:</strong> Steam Deck OLED, GPD Win 4, Retroid Pocket Nova for emulation downtime.</span><span class="ja"><strong>携帯ゲーム機:</strong> Steam Deck OLED, GPD Win 4 等</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== FACTIONS / STAFF =============== -->
+<section id="factions" class="section shell">
+  <h2 class="headline" style="text-align: center;"><span class="en">The Network</span><span class="ja">ネットワーク</span></h2>
+  <div class="staffGrid">
+    <div class="cardStaff">
+      <div class="avatar">0</div>
+      <div class="name">0CROSS</div>
+      <div class="chip"><span class="en">Artist</span><span class="ja">アーティスト</span></div>
+    </div>
+    <div class="cardStaff">
+      <div class="avatar">QA</div>
+      <div class="name">J. Sweeney</div>
+      <div class="chip"><span class="en">FQA Lead</span><span class="ja">FQAリード</span></div>
+    </div>
+    <div class="cardStaff">
+      <div class="avatar">🐕‍🦺</div>
+      <div class="name">Mickey</div>
+      <div class="chip"><span class="en">Security</span><span class="ja">セキュリティ</span></div>
+    </div>
+    <div class="cardStaff">
+      <div class="avatar">C</div>
+      <div class="name">Christian</div>
+      <div class="chip"><span class="en">Ally</span><span class="ja">味方</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== FOOTER =============== -->
+<footer style="margin-top: 4rem;">
+  <p><span class="en">0CROSS_OS / TOKYO UNDERGROUND 2026</span><span class="ja">ゼロクロッシング / 東京アンダーグラウンド 2026</span></p>
+</footer>
 
 <script>
-// Smooth Audio Fade System & Hover Handlers
-const audio = document.getElementById('bgTrack');
-let fadeInterval;
-
-const fadeAudioIn = () => {
-  clearInterval(fadeInterval);
-  if (audio.paused) {
-    audio.volume = 0;
-    audio.play().catch(e => console.log('Audio playback requires user interaction first.'));
+  // Theme Toggle logic
+  const themeToggle = document.getElementById('themeToggle');
+  const themeToggleMob = document.getElementById('themeToggleMobile');
+  function toggleTheme() {
+    if (document.documentElement.getAttribute('data-theme') === 'vaporwave') {
+      document.documentElement.removeAttribute('data-theme');
+      if(themeToggle) themeToggle.textContent = '⬜';
+      if(themeToggleMob) themeToggleMob.innerHTML = '⬜';
+    } else {
+      document.documentElement.setAttribute('data-theme', 'vaporwave');
+      if(themeToggle) themeToggle.textContent = '⬛';
+      if(themeToggleMob) themeToggleMob.innerHTML = '⬛';
+    }
   }
-  fadeInterval = setInterval(() => {
-    if (audio.volume < 0.9) {
-      audio.volume = Math.min(1, audio.volume + 0.1);
-    } else {
-      clearInterval(fadeInterval);
-    }
-  }, 50);
-};
+  if(themeToggle) themeToggle.addEventListener('click', toggleTheme);
+  if(themeToggleMob) themeToggleMob.addEventListener('click', toggleTheme);
 
-const fadeAudioOut = () => {
-  clearInterval(fadeInterval);
-  fadeInterval = setInterval(() => {
-    if (audio.volume > 0.1) {
-      audio.volume = Math.max(0, audio.volume - 0.1);
+  // Language Toggle logic
+  const langToggle = document.getElementById('langToggle');
+  const langToggleMob = document.getElementById('langToggleMobile');
+  function toggleLang() {
+    if (document.documentElement.getAttribute('lang') === 'en') {
+      document.documentElement.setAttribute('lang', 'ja');
+      if(langToggle) langToggle.textContent = 'EN';
+      if(langToggleMob) langToggleMob.innerHTML = 'EN';
     } else {
-      audio.pause();
-      clearInterval(fadeInterval);
+      document.documentElement.setAttribute('lang', 'en');
+      if(langToggle) langToggle.textContent = 'JP';
+      if(langToggleMob) langToggleMob.innerHTML = 'JP';
     }
-  }, 50);
-};
+  }
+  if(langToggle) langToggle.addEventListener('click', toggleLang);
+  if(langToggleMob) langToggleMob.addEventListener('click', toggleLang);
 
-const swapMap = { TACOS: 'HAT', VILLAIN: 'SHIRT', RAPTURE: 'SHIRT' };
-document.querySelectorAll('.product').forEach(card => {
-  const h3 = card.querySelector('h3');
-  const orig = h3.textContent;
+  // Nav Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const nav = document.getElementById('siteNav');
+  if(menuBtn && nav) menuBtn.addEventListener('click', () => nav.classList.toggle('open'));
+
+  // Swiper Init
+  new Swiper('.swiper', { loop: true, autoplay: { delay: 4000, disableOnInteraction: false }, effect: 'fade' });
+
+  // Map Init (Centered on Shibuya for Baia Tokyo)
+  const mapCenter = [35.6580, 139.7016]; 
+  const map = L.map('meetMap', { scrollWheelZoom: false }).setView(mapCenter, 15);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', { attribution: '© OSM' }).addTo(map);
+  L.marker(mapCenter).addTo(map).bindPopup('Baia Tokyo, Shibuya');
+
+  // Mickey the Poodle / Fader Surfing Logic
+  const sectionHints = {
+    'hero': ["<span class='ja'>プレイバック開始</span><span class='en'>Playback Started</span>"],
+    'lore': ["<span class='ja'>粘着質ではない</span><span class='en'>Vicious. Not Viscous.</span>", "<span class='ja'>ドラキュラ</span><span class='en'>Play Dracula!</span>"],
+    'archive': ["<span class='ja'>Baia Tokyoへようこそ</span><span class='en'>Welcome to Baia</span>", "<span class='ja'>WAY PAST COOL</span><span class='en'>WAY PAST COOL</span>"],
+    'loadout': ["<span class='ja'>EP-133起動</span><span class='en'>Booting EP-133 KO II</span>", "<span class='ja'>ボリューム最大</span><span class='en'>Master Volume Max</span>"],
+    'factions': ["<span class='ja'>ネットワーク接続中</span><span class='en'>Connecting...</span>"]
+  };
+
+  let activeSection = 'hero';
+  let hintIndex = 0;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+        if(entry.target.id !== activeSection && sectionHints[entry.target.id]) {
+           activeSection = entry.target.id;
+           hintIndex = 0; 
+           if (!window.isTracking) {
+             const speechEl = document.getElementById('turtleSpeech');
+             if(speechEl) { speechEl.innerHTML = sectionHints[activeSection][0]; speechEl.classList.add('show'); }
+           }
+        }
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('header, section').forEach(sec => observer.observe(sec));
+
+  const mascotWrap = document.getElementById('mascotWrapper');
+  const mascotImg = document.getElementById('mascotImg');
+  const tokoContainer = document.getElementById('tokoContainer');
+  const speechEl = document.getElementById('turtleSpeech');
   
-  card.addEventListener('mouseenter', () => {
-    h3.textContent = swapMap[orig] || orig;
-    fadeAudioIn();
-  });
-  
-  card.addEventListener('mouseleave', () => {
-    h3.textContent = orig;
-    fadeAudioOut();
-  });
-});
+  let currentScale = 1, targetScale = 1;
+  window.isTracking = false; 
+  let hasReachedEnd = false, trackProgress = 0;
+  let currentX = window.innerWidth * 0.9, currentY = window.innerHeight * 0.8;
+  let targetX = currentX, targetY = currentY, mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let isAttracted = false, flip = 1;
+
+  if (mascotWrap && speechEl) {
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      if (window.isTracking) return;
+      isAttracted = Math.hypot(mouseX - currentX, mouseY - currentY) < 200;
+    });
+
+    function animateMascot() {
+      if (!mascotWrap) return;
+      let prevX = currentX;
+      const pathEl = document.getElementById('audioWaveform');
+      const pathLen = pathEl ? pathEl.getTotalLength() : 0;
+      const S = Math.max(window.innerWidth / 1440, window.innerHeight / 1000);
+      const offsetX = (window.innerWidth - 1440 * S) / 2;
+
+      // Scroll determines progress on the waveform
+      const scrollP = window.scrollY / (document.body.scrollHeight - window.innerHeight || 1);
+      
+      if (pathEl) {
+        const pt = pathEl.getPointAtLength(scrollP * pathLen);
+        targetX = pt.x * S + offsetX;
+        targetY = pt.y * S;
+      }
+
+      currentX += (targetX - currentX) * 0.05; 
+      currentY += (targetY - currentY) * 0.05; 
+
+      if (currentX > prevX + 0.5) flip = -1; else if (currentX < prevX - 0.5) flip = 1;
+      const wobble = Math.sin(Date.now() / 200) * 8; 
+      const floatY = Math.sin(Date.now() / 400) * 10;
+
+      mascotWrap.style.left = currentX + 'px'; 
+      mascotWrap.style.top = currentY + 'px'; 
+      mascotWrap.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
+      mascotImg.style.transform = `scaleX(${flip}) rotate(${wobble}deg) translateY(${floatY}px)`;
+      if(tokoContainer) tokoContainer.style.transform = `scaleX(${flip})`;
+
+      requestAnimationFrame(animateMascot);
+    }
+    animateMascot();
+
+    setInterval(() => {
+        speechEl.classList.remove('show');
+        setTimeout(() => {
+          const hints = sectionHints[activeSection] || sectionHints['hero'];
+          hintIndex = (hintIndex + 1) % hints.length;
+          speechEl.innerHTML = hints[hintIndex];
+          speechEl.classList.add('show');
+        }, 400);
+    }, 7000);
+  }
 </script>
 </body>
 </html>

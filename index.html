@@ -5,14 +5,13 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>0CROSS // ZERO CROSSING FANDOM</title>
 
-  <!-- Fonts: Clean Editorial + Futuristic Orbitron for Night Mode -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&family=Inter:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800&family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-
-  <!-- Swiper / Leaflet -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
   <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -21,446 +20,642 @@
       --bg: #F9F8F6; --bg-alt: #FFFFFF; --ink: #111; --muted: #555;
       --primary: #ff003c; --accent: #00eaff; --card-bg: rgba(255, 255, 255, 0.88);
       --shadow: 10px 10px 0px rgba(255, 0, 60, 0.1); --border: #333;
-      --r: 0px; --content-max: 1080px; --h2: clamp(1.8rem, 4vw, 2.5rem); --scroll-offset: 70px;
+      --r: 0px; --content-max: 1200px; --scroll-offset: 70px;
       --font-body: 'Space Mono', monospace; --font-heading: 'Orbitron', sans-serif;
-      --topo-line: rgba(0, 234, 255, 0.1); --trail-base: rgba(255, 0, 60, 0.25);
-      --trail-pulse: #ff003c; --mountain-wire: rgba(0, 234, 255, 0.1); --sun-fill: rgba(0, 234, 255, 0.15);
+      --trail-base: rgba(255, 0, 60, 0.25); --trail-pulse: #ff003c; --mountain-wire: rgba(0, 234, 255, 0.1);
     }
     [data-theme="vaporwave"] {
       --bg: #050505; --bg-alt: #111; --ink: #f0f0f5; --muted: #888;
       --primary: #00ff64; --accent: #ff003c; --card-bg: #0a0a0a;
-      --shadow: 5px 5px 0px rgba(0, 255, 100, 0.2);
-      --border: #333; --font-heading: 'Orbitron', sans-serif;
-      --topo-line: rgba(0, 255, 100, 0.18); --trail-base: rgba(255, 0, 60, 0.25);
-      --trail-pulse: #00ff64; --mountain-wire: rgba(255, 0, 60, 0.32); --sun-fill: #00ff64;
+      --shadow: 5px 5px 0px rgba(0, 255, 100, 0.2); --border: #333;
+      --trail-base: rgba(255, 0, 60, 0.25); --trail-pulse: #00ff64; --mountain-wire: rgba(255, 0, 60, 0.32);
     }
+    
     :root[lang="en"] .ja { display: none !important; }
     :root[lang="ja"] .en { display: none !important; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: var(--font-body); color: var(--ink); background-color: var(--bg); -webkit-font-smoothing: antialiased; line-height: 1.6; transition: background-color 0.5s ease, color 0.5s ease; overflow-x: hidden; position: relative; }
+    body { font-family: var(--font-body); color: var(--ink); background-color: var(--bg); line-height: 1.6; overflow-x: hidden; position: relative; }
     
     [data-theme="vaporwave"] body, [data-theme="vaporwave"] p, [data-theme="vaporwave"] li, [data-theme="vaporwave"] span {
       text-shadow: 0 0 2px rgba(0, 255, 100, 0.25);
     }
 
-    h1, h2, h3, .serif { font-family: var(--font-heading); transition: color 0.3s ease; }
-    h1, h2, .headline { text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; text-shadow: 2px 2px 0px var(--accent); }
+    h1, h2, h3, .headline { font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; text-shadow: 2px 2px 0px var(--accent); }
     a { color: inherit; text-decoration: none; transition: 0.3s; }
-    img { max-width: 100%; display: block; height: auto; border-radius: 0px; filter: grayscale(100%); }
+    img { max-width: 100%; display: block; filter: grayscale(100%); }
     img:hover { filter: grayscale(0%); transition: 0.3s; }
     [id] { scroll-margin-top: var(--scroll-offset); }
     
-    .trail-backdrop { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1; overflow: hidden; opacity: 0.9; transition: opacity 0.5s ease; }
+    /* BACKGROUND AUDIO WAVEFORM */
+    .trail-backdrop { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1; overflow: hidden; opacity: 0.9; }
     .trail-svg { width: 100%; height: 100%; object-fit: cover; }
     .trail-pulse { stroke-dasharray: 14 26; animation: climbAscent 2.4s linear infinite; }
     @keyframes climbAscent { from { stroke-dashoffset: 80; } to { stroke-dashoffset: 0; } }
-    .waypoint-ping { animation: pingGlow 2s ease-in-out infinite alternate; }
-    @keyframes pingGlow { from { r: 5px; opacity: 0.6; } to { r: 10px; opacity: 1; } }
 
-    .hero-mountains, .footer-mountains {
-      width: 100%; height: 25vh; pointer-events: none; overflow: visible; display: block;
-    }
-    
-    /* MICKEY THE POODLE MASCOT */
-    .turtle-wrapper { position: fixed; width: 80px; z-index: 4; pointer-events: none; top: -200px; left: -200px; transform: translate(-50%, -50%); }
-    .turtle-img { width: 100%; height: auto; cursor: pointer; pointer-events: auto; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.8)); transition: filter 0.5s ease; border-radius: 50%; border: 2px solid var(--primary); }
-    [data-theme="vaporwave"] .turtle-img { filter: drop-shadow(0 0 15px var(--accent)); }
-    @keyframes turtleBackflip { 0% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-100px) rotate(-180deg); } 100% { transform: translateY(0) rotate(-360deg); } }
-    .do-backflip { animation: turtleBackflip 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-    
-    .turtle-speech { position: absolute; bottom: 90px; left: 50%; background: var(--bg-alt); color: var(--primary); padding: 0.75rem 1rem; border-radius: 0; font-size: 0.8rem; font-weight: 800; text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow); opacity: 0; transform: translateX(-50%) translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; width: max-content; pointer-events: none; text-transform: uppercase; }
-    .turtle-speech.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-    
-    .toko-container { position: absolute; bottom: -20px; left: 50%; width: 100px; margin-left: -50px; display: flex; justify-content: space-between; font-family: var(--font-heading); font-size: 0.65rem; font-weight: 800; color: var(--accent); pointer-events: none; }
-    .toko { opacity: 0; animation: tokoFlash 5s ease-in-out infinite; }
-    .toko.left { --rot: -8deg; animation-delay: 0s; }
-    .toko.right { --rot: 8deg; animation-delay: 2.5s; }
-    @keyframes tokoFlash { 0%, 10% { opacity: 0; transform: translateY(2px) scale(0.95) rotate(var(--rot)); } 20%, 40% { opacity: 0.6; transform: translateY(0) scale(1) rotate(var(--rot)); } 50%, 100% { opacity: 0; transform: translateY(2px) scale(0.95) rotate(var(--rot)); } }
-
-    #siteNav, #mobileMenu, header, section, footer { transition: opacity 1s ease; }
-    body.cinema-mode #siteNav, body.cinema-mode #mobileMenu, body.cinema-mode header, body.cinema-mode section, body.cinema-mode footer { opacity: 0 !important; pointer-events: none; }
-
-    .shell { max-width: var(--content-max); margin-inline: auto; padding-inline: clamp(1rem, 4vw, 2rem); }
-    .section { padding: 4rem 0; position: relative; z-index: 2; }
-    .split { display: grid; gap: 3rem; }
-    @media (min-width: 900px) { .split { grid-template-columns: 1fr 1fr; align-items: center; } }
-    
-    .badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 0; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; background: var(--primary); color: #000; margin-bottom: 1rem; border: 1px solid var(--primary); }
-    .headline { font-size: var(--h2); color: var(--primary); line-height: 1.2; margin-bottom: 1.5rem; }
-    .subtle { color: var(--muted); }
-    
-    .card { background: var(--card-bg); border-radius: var(--r); padding: clamp(1.5rem, 3vw, 2.5rem); box-shadow: var(--shadow); border: 1px solid var(--border); backdrop-filter: blur(14px); }
-
-    .btn, .btnWide, .btn-outline { font-style: normal; font-family: var(--font-heading); }
-    .btn, .btnWide { background: var(--bg); color: var(--primary); border: 1px solid var(--primary); padding: 0.8rem 1.5rem; font-weight: 700; display: inline-block; transition: all 0.1s ease; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 4px 4px 0px var(--primary); }
-    .btn:active, .btnWide:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--primary); }
-    .btnWide { width: 100%; text-align: center; padding: 1rem; }
-    .btn-outline { background: transparent; border: 1px solid var(--accent); color: var(--accent); box-shadow: 4px 4px 0px var(--accent); }
-    .btn-outline:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--accent); }
-
-    nav { position: fixed; top: 0; left: 0; width: 100%; background: var(--bg-alt); border-bottom: 1px solid var(--border); z-index: 120; transition: all 0.3s ease; }
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--scroll-offset); padding: 0 clamp(1rem, 4vw, 2rem); position: relative; }
-    .brand { display: flex; align-items: center; gap: 0.8rem; font-weight: 800; font-size: 1.2rem; z-index: 2; transition: color 0.3s ease; cursor: pointer; font-family: var(--font-heading); color: var(--primary); }
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; width: 100%; background: var(--bg-alt); border-bottom: 1px solid var(--border); z-index: 120; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--scroll-offset); padding: 0 clamp(1rem, 4vw, 2rem); }
+    .brand { display: flex; align-items: center; gap: 0.8rem; font-weight: 800; font-size: 1.2rem; cursor: pointer; font-family: var(--font-heading); color: var(--primary); }
     .links { display: none; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; }
-    .links a { color: var(--muted); position: relative; padding: 0 10px; }
+    .links a { color: var(--muted); padding: 0 10px; }
     .links a:hover { color: var(--accent); text-shadow: 2px 2px 0px rgba(255,0,60,0.5); }
-    .actions { display: none; gap: 1rem; align-items: center; z-index: 2; }
-    @media (min-width: 900px) { .links { display: flex; gap: 1.5rem; position: absolute; left: 50%; transform: translateX(-50%); } .actions { display: flex; align-items: center; } #menuBtn { display: none; } }
-    #themeToggle { font-size: 1.2rem; cursor: pointer; background: none; border: none; transition: transform 0.3s; margin-right: 0.5rem; }
-    .brand-text-match { background: none; border: none; cursor: pointer; margin-right: 0.5rem; transition: 0.3s; font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem; color: var(--primary); }
-    .hamburger { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 4px; padding: 0.5rem; z-index: 2; }
-    .hamburger span { display: block; width: 24px; height: 2px; background: var(--primary); transition: 0.3s; }
+    .actions { display: none; gap: 1rem; align-items: center; }
+    @media (min-width: 900px) { .links { display: flex; position: absolute; left: 50%; transform: translateX(-50%); } .actions { display: flex; } #menuBtn { display: none; } }
+    .brand-text-match, #themeToggle { background: none; border: none; cursor: pointer; font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem; color: var(--primary); margin-right: 0.5rem; }
+    .hamburger { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--primary); }
     .mobileMenu { position: fixed; top: var(--scroll-offset); left: 0; width: 100%; background: var(--bg-alt); padding: 2rem; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 1.5rem; text-align: center; transform: translateY(-100%); opacity: 0; visibility: hidden; transition: 0.3s; z-index: 100; }
     nav.open .mobileMenu { transform: translateY(0); opacity: 1; visibility: visible; }
 
+    /* HERO */
     header { margin-top: var(--scroll-offset); height: 75vh; position: relative; z-index: 2; border-bottom: 1px solid var(--border); }
     .swiper { width: 100%; height: 100%; background: #000; }
     .swiper-slide { display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, var(--bg-alt) 0%, #000 100%); font-family: var(--font-heading); color: var(--primary); font-size: 3vw; letter-spacing: 5px; opacity: 0.2; }
-    
-    .heroOverlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 5; padding: 1rem; color: var(--primary); background: radial-gradient(circle, transparent 20%, var(--bg) 100%); }
+    .heroOverlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 5; padding: 1rem; background: radial-gradient(circle, transparent 20%, var(--bg) 100%); }
     .heroOverlay h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 1rem; color: var(--bg); -webkit-text-stroke: 2px var(--primary); text-shadow: 4px 4px 0px var(--accent); }
-    .heroOverlay p { font-size: 1.2rem; max-width: 600px; margin-bottom: 2rem; font-family: var(--font-body); color: var(--muted); }
+    
+    /* SECTIONS */
+    .shell { max-width: var(--content-max); margin-inline: auto; padding-inline: clamp(1rem, 4vw, 2rem); }
+    .section { padding: 4rem 0; position: relative; z-index: 2; }
+    .split { display: grid; gap: 3rem; }
+    @media (min-width: 900px) { .split { grid-template-columns: 1fr 1fr; align-items: start; } }
+    .badge { display: inline-block; padding: 0.4rem 0.8rem; font-size: 0.75rem; font-weight: 800; background: var(--primary); color: #000; margin-bottom: 1rem; border: 1px solid var(--primary); }
+    .card { background: var(--card-bg); padding: clamp(1.5rem, 3vw, 2.5rem); box-shadow: var(--shadow); border: 1px solid var(--border); backdrop-filter: blur(14px); }
+    .btn, .btnWide, .btn-outline { font-family: var(--font-heading); background: var(--bg); color: var(--primary); border: 1px solid var(--primary); padding: 0.8rem 1.5rem; font-weight: 700; display: inline-block; cursor: pointer; text-transform: uppercase; box-shadow: 4px 4px 0px var(--primary); transition: 0.1s; }
+    .btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--primary); }
 
-    .eventGrid { display: grid; gap: 2rem; margin-top: 2rem; }
-    @media (min-width: 900px) { .eventGrid { grid-template-columns: 1fr 1fr; } }
-    .eventCol ul { list-style: none; margin-bottom: 1.5rem; }
-    .eventCol li { margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; }
-    .eventCol li::before { content: ">"; color: var(--accent); position: absolute; left: 0; font-size: 0.9rem; top: 1px; font-weight: 800; }
-    #meetMap { width: 100%; height: 300px; border-radius: 0; z-index: 1; border: 1px solid var(--border); filter: grayscale(100%) invert(90%); }
-    [data-theme="vaporwave"] #meetMap { filter: invert(1) hue-rotate(180deg) contrast(1.2) grayscale(80%); }
+    /* =========================================
+       MODULES: TRACKLIST & LYRICS TERMINAL 
+       ========================================= */
+    .module-window {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      width: 100%;
+      box-shadow: 10px 10px 0px rgba(0, 255, 100, 0.1);
+      position: relative;
+      transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      display: flex;
+      flex-direction: column;
+    }
+    [data-theme="vaporwave"] .module-window { box-shadow: var(--shadow); }
 
-    .staffGrid { display: flex; flex-wrap: nowrap; gap: 1.5rem; justify-content: flex-start; margin-top: 2rem; padding-bottom: 1.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
-    @media (min-width: 800px) { .staffGrid { justify-content: center; overflow-x: visible; } }
-    .staffGrid::-webkit-scrollbar { display: none; }
-    .cardStaff { flex: 0 0 auto; text-align: center; scroll-snap-align: center; width: 120px; }
-    .cardStaff .avatar { width: 75px; height: 75px; border-radius: 50%; margin: 0 auto 0.8rem; border: 2px solid var(--primary); background: var(--bg-alt); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-family: var(--font-heading); color: var(--accent); }
-    .cardStaff .name { font-weight: 800; color: var(--primary); font-family: var(--font-heading); font-size: 1rem; line-height: 1.2; }
-    .cardStaff .chip { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+    .module-header {
+      background: var(--bg);
+      padding: 10px 15px;
+      font-size: 12px;
+      font-family: var(--font-heading);
+      font-weight: bold;
+      color: var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      letter-spacing: 2px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .status-dot { height: 8px; width: 8px; background-color: var(--accent); border-radius: 50%; display: inline-block; box-shadow: 0 0 10px var(--accent); }
 
-    footer { position: relative; z-index: 2; background: var(--bg-alt); color: var(--primary); text-align: center; padding: 2rem; font-size: 0.9rem; border-top: 1px solid var(--border); font-family: var(--font-heading); font-weight: 800; letter-spacing: 0.1em; }
+    /* TRACKLIST */
+    .tracklist { list-style: none; padding: 20px; margin: 0; }
+    .track { padding: 12px 0; font-size: 14px; cursor: pointer; position: relative; color: var(--muted); transition: color 0.1s; border-bottom: 1px dashed var(--border); }
+    .track:last-child { border-bottom: none; }
+    .track.active { color: var(--primary); font-weight: bold; }
+    .track.active::before { content: '>'; position: absolute; left: -15px; color: var(--accent); }
+    
+    .track:hover {
+      color: var(--ink);
+      text-shadow: 2px 0px 1px var(--accent), -2px 0px 1px var(--primary);
+      animation: glitch-anim 0.2s infinite;
+    }
+
+    @keyframes glitch-anim {
+      0% { transform: translate(0) }
+      20% { transform: translate(-2px, 1px) }
+      40% { transform: translate(-2px, -1px) }
+      60% { transform: translate(2px, 1px) }
+      80% { transform: translate(2px, -1px) }
+      100% { transform: translate(0) }
+    }
+
+    /* LYRICS TERMINAL */
+    .lyrics-container {
+      height: 450px;
+      overflow-y: auto;
+      padding: 20px;
+      background: #000;
+      color: var(--primary);
+      font-size: 13px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      position: relative;
+    }
+    
+    /* CRT Scanline effect */
+    .lyrics-container::after {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 2;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
+
+    .lyrics-container::-webkit-scrollbar { width: 8px; }
+    .lyrics-container::-webkit-scrollbar-track { background: var(--bg-alt); border-left: 1px solid var(--border); }
+    .lyrics-container::-webkit-scrollbar-thumb { background: var(--primary); }
+
+    .typing-effect {
+      animation: textFlicker 0.1s infinite alternate;
+    }
+    @keyframes textFlicker {
+      0% { opacity: 0.9; text-shadow: 0 0 2px var(--primary); }
+      100% { opacity: 1; text-shadow: 0 0 8px var(--primary); }
+    }
+
   </style>
 </head>
 <body lang="en">
 
-<!-- =============== BACKGROUND AUDIO WAVEFORM =============== -->
+<!-- BACKGROUND AUDIO WAVEFORM -->
 <div class="trail-backdrop" aria-hidden="true">
   <svg class="trail-svg" viewBox="0 0 1440 1000" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-    <!-- Geometric Audio Grid / Studio Vibe -->
     <path d="M 0,300 L 1440,300 M 0,500 L 1440,500 M 0,700 L 1440,700" stroke="var(--mountain-wire)" stroke-width="1" stroke-dasharray="4 4" />
     <path d="M 300,0 L 300,1000 M 720,0 L 720,1000 M 1140,0 L 1140,1000" stroke="var(--mountain-wire)" stroke-width="1" stroke-dasharray="4 4" />
-    
-    <!-- The Master Fader Waveform Path -->
-    <path id="audioWaveform" d="M 0,900 L 150,850 L 200,900 L 300,600 L 400,800 L 500,400 L 600,750 L 720,200 L 800,800 L 900,500 L 1000,900 L 1100,700 L 1250,900 L 1440,900" fill="none" stroke="var(--trail-base)" stroke-width="4" stroke-linejoin="miter" />
-    <path d="M 0,900 L 150,850 L 200,900 L 300,600 L 400,800 L 500,400 L 600,750 L 720,200 L 800,800 L 900,500 L 1000,900 L 1100,700 L 1250,900 L 1440,900" fill="none" stroke="var(--trail-pulse)" stroke-width="3" stroke-linejoin="miter" filter="url(#neonGlow)" class="trail-pulse" />
+    <path d="M 0,900 L 150,850 L 200,900 L 300,600 L 400,800 L 500,400 L 600,750 L 720,200 L 800,800 L 900,500 L 1000,900 L 1100,700 L 1250,900 L 1440,900" fill="none" stroke="var(--trail-base)" stroke-width="4" stroke-linejoin="miter" />
+    <path d="M 0,900 L 150,850 L 200,900 L 300,600 L 400,800 L 500,400 L 600,750 L 720,200 L 800,800 L 900,500 L 1000,900 L 1100,700 L 1250,900 L 1440,900" fill="none" stroke="var(--trail-pulse)" stroke-width="3" stroke-linejoin="miter" class="trail-pulse" />
   </svg>
 </div>
 
-<!-- =============== MICKEY MASCOT =============== -->
-<div class="turtle-wrapper" id="mascotWrapper">
-  <div class="turtle-speech" id="turtleSpeech"></div>
-  <div id="turtleFlipWrap">
-    <!-- Using a placeholder for Mickey the Black Toy Poodle -->
-    <div class="turtle-img" id="mascotImg" style="width: 80px; height: 80px; background: #000; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 0 20px var(--accent);">
-      🐕‍🦺
-    </div>
-  </div>
-  <div class="toko-container" id="tokoContainer">
-    <span class="toko left">ミッキー</span>
-    <span class="toko right">ミッキー</span>
-  </div>
-</div>
-
-<!-- =============== NAV =============== -->
+<!-- NAV -->
 <nav id="siteNav">
   <div class="nav-inner">
-    <div class="brand" id="brandLogo">
-      <span class="en">0CROSS_OS</span>
-      <span class="ja">ゼロクロッシング</span>
-    </div>
+    <div class="brand">0CROSS_OS</div>
     <div class="links">
-      <a href="#lore"><span class="en">Lore</span><span class="ja">ロア</span></a>
-      <a href="#archive"><span class="en">Live Archive</span><span class="ja">ライブ</span></a>
-      <a href="#loadout"><span class="en">Loadout</span><span class="ja">機材</span></a>
-      <a href="#factions"><span class="en">Factions</span><span class="ja">ファクション</span></a>
+      <a href="#terminal">Terminal</a>
+      <a href="#archive">Archive</a>
+      <a href="#loadout">Loadout</a>
     </div>
     <div class="actions">
-      <button id="langToggle" aria-label="Toggle Language" class="brand-text-match">JP</button>
-      <button id="themeToggle" aria-label="Toggle Night Mode">⬛</button>
-      <a class="btn" href="https://github.com/v1llain0us"><span class="en">Connect</span><span class="ja">接続</span></a>
+      <button id="langToggle" class="brand-text-match">JP</button>
+      <button id="themeToggle">⬛</button>
     </div>
     <button id="menuBtn" class="hamburger"><span></span><span></span><span></span></button>
   </div>
   <div id="mobileMenu" class="mobileMenu">
-    <a href="#lore"><span class="en">Lore</span><span class="ja">ロア</span></a>
-    <a href="#archive"><span class="en">Live Archive</span><span class="ja">ライブ</span></a>
-    <a href="#loadout"><span class="en">Loadout</span><span class="ja">機材</span></a>
-    <a href="#factions"><span class="en">Factions</span><span class="ja">ファクション</span></a>
-    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
-      <button id="langToggleMobile" class="brand-text-match" style="flex: 1; text-align: center;">JP</button>
-      <button id="themeToggleMobile" class="btn-outline" style="padding: 0.8rem; font-size: 1.2rem; flex: 1;">⬛</button>
-    </div>
+    <a href="#terminal">Terminal</a>
+    <a href="#archive">Archive</a>
+    <a href="#loadout">Loadout</a>
   </div>
 </nav>
 
-<!-- =============== HERO =============== -->
+<!-- HERO -->
 <header id="hero">
   <div class="swiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide">WAY PAST COOL</div>
       <div class="swiper-slide">LISAN AL GAIB</div>
-      <div class="swiper-slide">DRACULA</div>
     </div>
     <div class="heroOverlay">
-      <h1 id="heroTitle"><span class="en">VICIOUS.</span><span class="ja">悪意。</span><br><span class="en">NOT VISCOUS.</span><span class="ja">粘着質ではない。</span></h1>
-      <p id="heroSub"><span class="en">The Official 0CROSS Fandom Archive</span><span class="ja">公式ゼロクロッシング・アーカイブ</span></p>
-      <a href="#archive" class="btn"><span class="en">Boot Up</span><span class="ja">起動する</span></a>
+      <h1><span class="en">VICIOUS.</span><span class="ja">悪意。</span><br><span class="en">NOT VISCOUS.</span><span class="ja">粘着質ではない。</span></h1>
+      <a href="#terminal" class="btn">Boot System</a>
     </div>
   </div>
 </header>
 
-<!-- =============== LORE =============== -->
-<section id="lore" class="section shell split">
-  <div class="mission-text">
-    <span class="badge"><span class="en">The Protocol</span><span class="ja">プロトコル</span></span>
-    <h2 class="headline"><span class="en">Melt Forever</span><span class="ja">メルト・フォーエバー</span></h2>
-    <p><span class="en">Originating from the Shibuya underground, <strong>0CROSS</strong> (ゼロクロッシング) is a rap and electronic audio project completely engineered from top to bottom. No corporate backing, no soft landings. Just glitch aesthetics and heavy bass lines.</span><span class="ja">渋谷のアンダーグラウンドから発信される<strong>0CROSS</strong>（ゼロクロッシング）は、すべてが自作でエンジニアリングされたラップとエレクトロニックのオーディオプロジェクトです。企業の後ろ盾もなく、ソフトな着地もありません。グリッチな美学とヘビーなベースラインがあるのみです。</span></p>
-    <p><span class="en">From the lyrical precision of <em>Way Past Cool</em> to the distorted reality of <em>Lisan Al Gaib</em>, this space archives the beats, the shows, and the hardware that makes the noise.</span><span class="ja">「Way Past Cool」の叙情的な正確さから、「Lisan Al Gaib」の歪んだ現実まで、この空間はビート、ライブ、そしてノイズを生み出すハードウェアをアーカイブしています。</span></p>
-    <a class="btn btn-outline" style="margin-top: 1rem;" href="#"><span class="en">Read the Manifest</span><span class="ja">マニフェストを読む</span></a>
+<!-- =============== TERMINAL MODULE (TRACKLIST & LYRICS) =============== -->
+<section id="terminal" class="section shell split">
+  
+  <!-- Left Column: Tracklist -->
+  <div class="module-window" id="tracklist-module">
+    <div class="module-header">
+      <span>0CROSS_OS // TRACKS</span>
+      <span class="status-dot"></span>
+    </div>
+    <ul class="tracklist" id="tracklist">
+      <li class="track active" data-track="0">01. HERE (DEMO)</li>
+      <li class="track" data-track="1">02. AURA (DEMO)</li>
+      <li class="track" data-track="2">03. DRACULA</li>
+      <li class="track" data-track="3">04. WAY PAST COOL</li>
+      <li class="track" data-track="4">05. BATTERY DRAINED</li>
+      <li class="track" data-track="5">06. MELT FOREVER</li>
+      <li class="track" data-track="6">07. AUDIENCE</li>
+      <li class="track" data-track="7">08. FREE PLANS</li>
+      <li class="track" data-track="8">09. TIMELINES</li>
+      <li class="track" data-track="9">10. DIAMOND</li>
+      <li class="track" data-track="10">11. LISAN AL GAIB (BONUS)</li>
+    </ul>
   </div>
-  <div>
-    <!-- Placeholder for cover art -->
-    <div style="width: 100%; aspect-ratio: 1; background: repeating-linear-gradient(45deg, #000, #000 10px, var(--primary) 10px, var(--primary) 20px); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); color: #fff; font-size: 2rem; background-blend-mode: overlay;">
-      [AURA DEMO]
+
+  <!-- Right Column: Lyrics Terminal -->
+  <div class="module-window" id="lyrics-module">
+    <div class="module-header">
+      <span id="lyric-header">DECRYPTING // HERE_DEMO.TXT</span>
+      <span class="status-dot" style="background-color: var(--primary); box-shadow: 0 0 10px var(--primary);"></span>
+    </div>
+    <div class="lyrics-container" id="lyrics-display">
+      <!-- Lyrics inject here -->
     </div>
   </div>
+
 </section>
 
-<!-- =============== ARCHIVE (EVENTS) =============== -->
+<!-- ARCHIVE -->
 <section id="archive" class="section shell card">
-  <span class="badge"><span class="en">Live Archive</span><span class="ja">ライブ・アーカイブ</span></span>
-  <h2 class="headline"><span class="en">The Baia Tokyo Set</span><span class="ja">Baia Tokyo セット</span></h2>
-  <p class="subtle"><span class="en">Archive: September 19, 2026</span><span class="ja">アーカイブ：2026年9月19日</span></p>
-  <div class="eventGrid">
-    <div class="eventCol">
-      <p><span class="en">A relentless live music performance at Baia Tokyo, featuring deep cuts from the 0cross catalog. From coordinating door-splits to pushing the sound system to its absolute limit, the September 19th show solidified the Shibuya presence.</span><span class="ja">Baia Tokyoで行われた、ゼロクロスのカタログからディープな楽曲を披露した容赦ないライブパフォーマンス。9月19日のショーは、渋谷での存在感を決定づけました。</span></p>
-      <br><h3><span class="en">Set Details</span><span class="ja">セット詳細</span></h3>
-      <ul>
-        <li><span class="en"><strong>Venue:</strong> Baia Tokyo, Shibuya</span><span class="ja"><strong>会場:</strong> Baia Tokyo, 渋谷</span></li>
-        <li><span class="en"><strong>Tracks:</strong> Dracula, Battery Drained, Free Plans</span><span class="ja"><strong>トラック:</strong> Dracula, Battery Drained, Free Plans</span></li>
-        <li><span class="en"><strong>Prior Gig:</strong> March 24th @ 阿佐ヶ谷DRIFT</span><span class="ja"><strong>前回のライブ:</strong> 3月24日 @ 阿佐ヶ谷DRIFT</span></li>
-      </ul>
-      <p class="subtle" style="font-size: 0.85rem;"><span class="en">Note: Mickey the poodle was not allowed on the dancefloor.</span><span class="ja">注記：トイプードルのミッキーはダンスフロアに入れませんでした。</span></p>
-    </div>
-    <div class="eventCol">
-      <div id="meetMap"></div>
-      <a class="btn btnWide" style="margin-top: 1rem;" href="https://www.google.com/maps/search/?api=1&query=Baia+Tokyo+Shibuya" target="_blank"><span class="en">Boot Map Coord</span><span class="ja">マップ座標を起動</span></a>
-    </div>
-  </div>
+  <span class="badge">Live Archive</span>
+  <h2 style="font-size: 1.5rem; color: var(--primary);">The Baia Tokyo Set</h2>
+  <p class="subtle">Archive: September 19, 2026</p>
+  <p style="margin-top: 1rem;">A relentless live music performance at Baia Tokyo, featuring deep cuts from the 0cross catalog. From coordinating door-splits to pushing the sound system to its absolute limit, the September 19th show solidified the Shibuya presence.</p>
 </section>
 
-<!-- =============== LOADOUT =============== -->
-<section id="loadout" class="section shell">
-  <h2 class="headline" style="text-align: center;"><span class="en">Studio Loadout</span><span class="ja">スタジオ機材</span></h2>
-  <div style="text-align: center; margin-bottom: 3rem;"><p class="subtle"><span class="en">The hardware and software powering the noise.</span><span class="ja">ノイズを生み出すハードウェアとソフトウェア。</span></p></div>
-  <div class="card">
-    <span class="badge"><span class="en">Tech Specs</span><span class="ja">スペック</span></span>
-    <div class="eventGrid" style="margin-top: 0;">
-      <div class="eventCol">
-        <ul>
-          <li><span class="en"><strong>Primary Sampler:</strong> Teenage Engineering EP-133 K.O. II for chopping loops and drum sequences.</span><span class="ja"><strong>サンプラー:</strong> Teenage Engineering EP-133 K.O. II</span></li>
-          <li><span class="en"><strong>Interface:</strong> Solid State Logic 2 MKII processing the master inputs.</span><span class="ja"><strong>インターフェース:</strong> Solid State Logic 2 MKII</span></li>
-          <li><span class="en"><strong>Pedal:</strong> HeadRush VX5 utilized for vocal effects and live looping.</span><span class="ja"><strong>ペダル:</strong> HeadRush VX5</span></li>
-        </ul>
-      </div>
-      <div class="eventCol">
-        <ul>
-          <li><span class="en"><strong>DAWs:</strong> Logic Pro and FL Studio for composition and digital audio editing.</span><span class="ja"><strong>DAW:</strong> Logic Pro & FL Studio</span></li>
-          <li><span class="en"><strong>Mobile Comm:</strong> Samsung Galaxy Z Fold 8 & iPhone Air with Smart Glasses.</span><span class="ja"><strong>通信機器:</strong> Galaxy Z Fold 8 & iPhone Air</span></li>
-          <li><span class="en"><strong>Handhelds:</strong> Steam Deck OLED, GPD Win 4, Retroid Pocket Nova for emulation downtime.</span><span class="ja"><strong>携帯ゲーム機:</strong> Steam Deck OLED, GPD Win 4 等</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =============== FACTIONS / STAFF =============== -->
-<section id="factions" class="section shell">
-  <h2 class="headline" style="text-align: center;"><span class="en">The Network</span><span class="ja">ネットワーク</span></h2>
-  <div class="staffGrid">
-    <div class="cardStaff">
-      <div class="avatar">0</div>
-      <div class="name">0CROSS</div>
-      <div class="chip"><span class="en">Artist</span><span class="ja">アーティスト</span></div>
-    </div>
-    <div class="cardStaff">
-      <div class="avatar">QA</div>
-      <div class="name">J. Sweeney</div>
-      <div class="chip"><span class="en">FQA Lead</span><span class="ja">FQAリード</span></div>
-    </div>
-    <div class="cardStaff">
-      <div class="avatar">🐕‍🦺</div>
-      <div class="name">Mickey</div>
-      <div class="chip"><span class="en">Security</span><span class="ja">セキュリティ</span></div>
-    </div>
-    <div class="cardStaff">
-      <div class="avatar">C</div>
-      <div class="name">Christian</div>
-      <div class="chip"><span class="en">Ally</span><span class="ja">味方</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- =============== FOOTER =============== -->
-<footer style="margin-top: 4rem;">
-  <p><span class="en">0CROSS_OS / TOKYO UNDERGROUND 2026</span><span class="ja">ゼロクロッシング / 東京アンダーグラウンド 2026</span></p>
+<!-- FOOTER -->
+<footer style="margin-top: 4rem; text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-family: var(--font-heading); color: var(--primary);">
+  <p>0CROSS_OS / TOKYO UNDERGROUND 2026</p>
 </footer>
 
 <script>
-  // Theme Toggle logic
+  // Theme Toggle
   const themeToggle = document.getElementById('themeToggle');
-  const themeToggleMob = document.getElementById('themeToggleMobile');
   function toggleTheme() {
     if (document.documentElement.getAttribute('data-theme') === 'vaporwave') {
       document.documentElement.removeAttribute('data-theme');
-      if(themeToggle) themeToggle.textContent = '⬜';
-      if(themeToggleMob) themeToggleMob.innerHTML = '⬜';
+      themeToggle.textContent = '⬜';
     } else {
       document.documentElement.setAttribute('data-theme', 'vaporwave');
-      if(themeToggle) themeToggle.textContent = '⬛';
-      if(themeToggleMob) themeToggleMob.innerHTML = '⬛';
+      themeToggle.textContent = '⬛';
     }
   }
-  if(themeToggle) themeToggle.addEventListener('click', toggleTheme);
-  if(themeToggleMob) themeToggleMob.addEventListener('click', toggleTheme);
-
-  // Language Toggle logic
-  const langToggle = document.getElementById('langToggle');
-  const langToggleMob = document.getElementById('langToggleMobile');
-  function toggleLang() {
-    if (document.documentElement.getAttribute('lang') === 'en') {
-      document.documentElement.setAttribute('lang', 'ja');
-      if(langToggle) langToggle.textContent = 'EN';
-      if(langToggleMob) langToggleMob.innerHTML = 'EN';
-    } else {
-      document.documentElement.setAttribute('lang', 'en');
-      if(langToggle) langToggle.textContent = 'JP';
-      if(langToggleMob) langToggleMob.innerHTML = 'JP';
-    }
-  }
-  if(langToggle) langToggle.addEventListener('click', toggleLang);
-  if(langToggleMob) langToggleMob.addEventListener('click', toggleLang);
+  themeToggle.addEventListener('click', toggleTheme);
 
   // Nav Mobile menu
-  const menuBtn = document.getElementById('menuBtn');
-  const nav = document.getElementById('siteNav');
-  if(menuBtn && nav) menuBtn.addEventListener('click', () => nav.classList.toggle('open'));
+  document.getElementById('menuBtn').addEventListener('click', () => document.getElementById('siteNav').classList.toggle('open'));
 
   // Swiper Init
   new Swiper('.swiper', { loop: true, autoplay: { delay: 4000, disableOnInteraction: false }, effect: 'fade' });
 
-  // Map Init (Centered on Shibuya for Baia Tokyo)
-  const mapCenter = [35.6580, 139.7016]; 
-  const map = L.map('meetMap', { scrollWheelZoom: false }).setView(mapCenter, 15);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', { attribution: '© OSM' }).addTo(map);
-  L.marker(mapCenter).addTo(map).bindPopup('Baia Tokyo, Shibuya');
+  // Lyrics Database
+  const lyricsDB = [
+    `Rock man
+Got no cash
+Not so fast
+Got no plans
+Plot it to last
 
-  // Mickey the Poodle / Fader Surfing Logic
-  const sectionHints = {
-    'hero': ["<span class='ja'>プレイバック開始</span><span class='en'>Playback Started</span>"],
-    'lore': ["<span class='ja'>粘着質ではない</span><span class='en'>Vicious. Not Viscous.</span>", "<span class='ja'>ドラキュラ</span><span class='en'>Play Dracula!</span>"],
-    'archive': ["<span class='ja'>Baia Tokyoへようこそ</span><span class='en'>Welcome to Baia</span>", "<span class='ja'>WAY PAST COOL</span><span class='en'>WAY PAST COOL</span>"],
-    'loadout': ["<span class='ja'>EP-133起動</span><span class='en'>Booting EP-133 KO II</span>", "<span class='ja'>ボリューム最大</span><span class='en'>Master Volume Max</span>"],
-    'factions': ["<span class='ja'>ネットワーク接続中</span><span class='en'>Connecting...</span>"]
-  };
+Count up the racks
+That's that
+Lotta tasks
+Brought it to max
+Lotta facts don’t matter
 
-  let activeSection = 'hero';
-  let hintIndex = 0;
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-        if(entry.target.id !== activeSection && sectionHints[entry.target.id]) {
-           activeSection = entry.target.id;
-           hintIndex = 0; 
-           if (!window.isTracking) {
-             const speechEl = document.getElementById('turtleSpeech');
-             if(speechEl) { speechEl.innerHTML = sectionHints[activeSection][0]; speechEl.classList.add('show'); }
-           }
-        }
-      }
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('header, section').forEach(sec => observer.observe(sec));
+Bounce yo ass
+Pound yo glass
+Shot a glance
+At my hag
+I’m enhanced
 
-  const mascotWrap = document.getElementById('mascotWrapper');
-  const mascotImg = document.getElementById('mascotImg');
-  const tokoContainer = document.getElementById('tokoContainer');
-  const speechEl = document.getElementById('turtleSpeech');
-  
-  let currentScale = 1, targetScale = 1;
-  window.isTracking = false; 
-  let hasReachedEnd = false, trackProgress = 0;
-  let currentX = window.innerWidth * 0.9, currentY = window.innerHeight * 0.8;
-  let targetX = currentX, targetY = currentY, mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-  let isAttracted = false, flip = 1;
+You up late
+You a fan
+What they say
+On the gram
+No I don't think you’d fathom
+No not after you not bad
+Where you at?
 
-  if (mascotWrap && speechEl) {
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX; mouseY = e.clientY;
-      if (window.isTracking) return;
-      isAttracted = Math.hypot(mouseX - currentX, mouseY - currentY) < 200;
-    });
+Doubt you’d last, doubt you’d last
+Rock man
+Got no cash
+Where you at?
+Are you with her? Or you slither?
 
-    function animateMascot() {
-      if (!mascotWrap) return;
-      let prevX = currentX;
-      const pathEl = document.getElementById('audioWaveform');
-      const pathLen = pathEl ? pathEl.getTotalLength() : 0;
-      const S = Math.max(window.innerWidth / 1440, window.innerHeight / 1000);
-      const offsetX = (window.innerWidth - 1440 * S) / 2;
+Gotta measure all my bands
+Kinda glad she got no past
+And no rhythm, jus a figment
 
-      // Scroll determines progress on the waveform
-      const scrollP = window.scrollY / (document.body.scrollHeight - window.innerHeight || 1);
+Bounce your ass
+When you sitting on the glass
+Girl you know I won’t last
+Solitaire
+On my half
+With a gram
+You enhanced
+Your stamina
+Girl you know I’m entranced`,
+
+    `[AURA DEMO LOG]
+> NO LYRICS FOUND
+> INSTRUMENTAL_DATA_ONLY
+> WAITING FOR VOCAL INPUT...`,
+
+    `Cross had to do it to em, snipe
+Hype on the booty
+I bet that lil bitch gon do what I like
+Cross went Judge Judy on that pussy, finna, snipe
+Pantyline hype, tongue
+Tack on numb
+Anti the Christ type
+Running the dyke, run
+I told her sike, doing this shit for fun
+
+She do exactly what I want
+Greater than Gatsby we off the funds
+We tossing hundreds they stay on some ones
+All that shit come to a head, when, it comes to the fuck
+She stay unplugged, babe dont pay me no hush hush
+Sumaho, One, plus plus
+Villain and I got a plush crush
+
+Never had loyalty for anyone, never did anyone given a fuck
+(Sucking the semen, pay me in blood)
+
+Shorty chose to be with a leader
+Staying unloyal, bitch I'm a demon
+Swallow me whole but she spit out the semen
+
+Neimans, sounds like her problem for leaving, ha
+
+My money longer than James Cameron
+Stronger than John Lennon Imagine
+On off the court, straight fundamentals
+And the divorce it aint none of you business
+Speaking of funny bitches
+This shit ain't nothing to me man`,
+
+    `Y’all can die mad, I was born to be here
+Wrote all that up on a four-speed
+Vader go Sith, use the force to bleed em
+Ghost of this bitch still torment me
+You seen I’m up next, so of course you diva
+We just sold out all the floor seats
+Hatchet Man axe it, that’s actually cleaver
+Told that girl, dammit, don't force me
+
+Thought of these goals when I heard I'm in it
+Galaxy Fold, never phone in, we been here
+Someone foretold that I already win it
+Someone to hold, baby, Hare the Krishna
+Already Christian
+Outer the space, how we count down the system
+Okay, I got it now call it autistic
+Autograph sign-in, they signing the missile
+
+Uh, whew!
+This is my life, whew!
+Already told you I don’t take advice
+Diss you my right, dome you I don't need a high price
+Late for the fight
+Taking a vote with the highlights
+Name of the heist
+Live in the moment that I like
+
+Way past cool, woo!
+That’s what I do, yeah
+That's how we move
+Ran in the coop
+See how the past move (Whoa)
+Way too slow, pace too slow
+Pay me like Kuzco
+Secret Wars, that Endgame
+Anthony Russo`,
+
+    `Get it need it hey
+Ran up the beach waves
+Laughin at me, fake
+(Bitch) I don’t need saving
+
+Plan no B, A
+Rap a three way
+That’s my cheap rate
+Mad at me
+Battery drained
+
+Plant a disease
+Planet to free
+Dammit to me too backhanded to see, yuh yuh
+Probably un-add yourself
+Caught you red handed a plant of the seed, laid
+
+All yo bad habits don’t matter to me
+Free all my bad bitches land of the free
+
+You ain’t have to meet Ye
+You just have to be Ye
+
+Granite where my seat lay
+My dawg said you ain’t no freak
+Lets see, let’s see where your teeth lay
+Platinum in a week
+Laughing after words you speak late
+Had bitch after me
+I think all them bastards need to pay
+Blast em in the street`,
+
+    `Melt forever baby
+Melt forever in my arms
+Be the devil tamer
+Ease the trembles in my heart
+
+What do I do?
+Cross off another one
+God bless him doing a stupid phenomenon
+What's left to ruin you? Causing a problem
+Earth to Brent, call cops at Comic Con
+Stop and unsend the text
+Promise a homicide bet
+Hominid red, vamanous
+Federal expressing another one hundred over
+Said I'm the best dressed
+How would they know?
+
+Death threats, let me collect
+Dead text stuck in the drafts
+I'm finna break down to brass tax
+I ain't gon' fish down no tax brackets
+I axe that lil bitch for cash back
+They been ignoring the facts bad
+I'm finna go ahead and pass back
+She said she go with it fast, fast
+
+Melt forever baby
+Melt forever in my arms
+Be the devil tamer
+Ease the trembles in my heart`,
+
+    `Thats not your audience girl
+Try not to promise shit girl
+Give em Omari
+Hari the kari
+End up with all of this girl
+
+I think I’m falling baby girl
+Could have kept all this safe girl
+What did you call me?
+Stick with the progress
+Feminine imminent, sorry
+
+I told her, aw this sick world
+That’s not your audience girl
+Kept her from falling deeper
+I tend to polish it girl
+
+Im in your Audi
+Sick of the sorries
+Nicholas slippin then saving it for me
+In a precarious world
+Sick with the sonnets
+Did it for audience
+
+We in Shibuya it ain’t nothing new to ya, ya
+Pass that charcuterie fill that jacuzzi up
+Bitches tattoo me they’d probably shoot me ya
+Fooly the cooly my life is a movie ya`,
+
+    `Why would you say that to me? Man
+Might go and find what I need, can
+Why wont you say what you mean
+I got everything handed to me
+
+But the truth
+I won’t side with you
+I been tired of rules
+Fates, that you make
+Man do that 'fore its too late
+
+Wobble loose, this my Waterloo
+I won’t cry just hide the truth
+Man If I were you, why would I decide to lose?
+
+Fuck your video game
+Fuck your console
+Fuck what Hideo say
+Fuck your household
+
+We got free plans
+What it do what it do?
+They got three paths
+One for me two for you
+Woo woo!`,
+
+    `Timelines
+Why does the time lie
+Shut me up eyes wide
+Nine lives
+Probably do cardio time flies
+Lifeline
+I wasnt part of yo fine line
+Dont know da code to yo wifi
+Bright eyes
+Gave u the time of ur life life
+Why you been typing those white lies
+Nice try
+Hate that I might be more Christlike
+Shine shine
+
+Time moving on but I slow it
+Every memory stolen
+All eyes on me when I’m zonin
+Movin the posts from the goalie
+
+She laugh like she think know me huh
+Holdin my hand losing focus huh
+Chasin her love like it owe me
+Buyin in high and then sold it low
+
+I cannot tell if it’s heaven
+Or all the lights just playin with me
+You always change like the weather
+Farenheit babe stay here with me`,
+
+    `Fuckin’ hope you happy
+She condone you rappin’
+If they don’t want smoke, they won’t know what happened
+In a cult, so savage
+Out in Seoul, ghost habit
+When he float, coast to coast, up the toast and down it
+
+Said the most (Yeah)
+Run it up the fold (Yeah)
+Under where mold is
+Like my daddy told me
+Okay
+
+Now we gettin’ cozy, yeah
+But I set it cold (Cold)
+Never let a coat, yeah
+Never need a coat
+
+I’ma do my own thang
+I am an adult (Yeah)
+Spittin’ with the dope slang
+Wrote that from the soul, yeah (Oh yeah)
+Oh yeah, we did gold slang
+Yeah, we had it gross
+Yeah
+Overdid the whole thing
+Own it, here we go`,
+
+    `Can’t see you (Got what I need from you)
+Can’t breathe
+Cant please you (Not like you need me to)
+Cant freak
+
+That’s lethal (Now that I think of you)
+Last week
+Act decent
+Cant leave
+
+I free you, (Know you got things to do)
+
+She gotta eat I feast (Sheesh)
+Got me high 3 at least
+Cross eye Nissan leaf
+Lisan al-Gaib
+Shit goes out I sleep
+Freaks out crease on crease
+Leave out all police
+Cop a couple cars they lease
+Crosser hold it down for weeks
+Read back how that seem
+Lisan Al Gaib
+I don’t gotta pay thou fees
+U aint finna pout just leave
+Yea I bought a house y’all lease
+She aint gettin how that reads
+He dont got a crown just heat`
+  ];
+
+  // Module Interaction Logic
+  const tracks = document.querySelectorAll('.track');
+  const display = document.getElementById('lyrics-display');
+  const lyricHeader = document.getElementById('lyric-header');
+
+  // Load first track initially
+  display.innerHTML = `<div class="typing-effect">${lyricsDB[0]}</div>`;
+
+  tracks.forEach(track => {
+    track.addEventListener('click', function() {
+      // Remove active class from all
+      tracks.forEach(t => t.classList.remove('active'));
+      // Add active to clicked
+      this.classList.add('active');
       
-      if (pathEl) {
-        const pt = pathEl.getPointAtLength(scrollP * pathLen);
-        targetX = pt.x * S + offsetX;
-        targetY = pt.y * S;
-      }
-
-      currentX += (targetX - currentX) * 0.05; 
-      currentY += (targetY - currentY) * 0.05; 
-
-      if (currentX > prevX + 0.5) flip = -1; else if (currentX < prevX - 0.5) flip = 1;
-      const wobble = Math.sin(Date.now() / 200) * 8; 
-      const floatY = Math.sin(Date.now() / 400) * 10;
-
-      mascotWrap.style.left = currentX + 'px'; 
-      mascotWrap.style.top = currentY + 'px'; 
-      mascotWrap.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
-      mascotImg.style.transform = `scaleX(${flip}) rotate(${wobble}deg) translateY(${floatY}px)`;
-      if(tokoContainer) tokoContainer.style.transform = `scaleX(${flip})`;
-
-      requestAnimationFrame(animateMascot);
-    }
-    animateMascot();
-
-    setInterval(() => {
-        speechEl.classList.remove('show');
-        setTimeout(() => {
-          const hints = sectionHints[activeSection] || sectionHints['hero'];
-          hintIndex = (hintIndex + 1) % hints.length;
-          speechEl.innerHTML = hints[hintIndex];
-          speechEl.classList.add('show');
-        }, 400);
-    }, 7000);
-  }
+      const trackId = this.getAttribute('data-track');
+      const trackName = this.innerText.replace(/[0-9.]/g, '').trim().replace(/ /g, '_').toUpperCase();
+      
+      // Update header
+      lyricHeader.innerText = `DECRYPTING // ${trackName}.TXT`;
+      
+      // Clear and type effect
+      display.innerHTML = '';
+      
+      // Simulate quick terminal parse
+      setTimeout(() => {
+        display.innerHTML = `<div class="typing-effect">${lyricsDB[trackId]}</div>`;
+        display.scrollTop = 0;
+      }, 50);
+    });
+  });
 </script>
 </body>
 </html>

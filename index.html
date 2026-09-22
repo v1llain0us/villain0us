@@ -1,107 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<title>Villainous Brand // Tokyo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<meta property="og:title" content="Villainous Brand - Tokyo Underground Fashion" />
+<meta property="og:description" content="Glitch gospel & cyber-punk streetwear drops. Join the villain club." />
+<meta property="og:image" content="https://villain0.us/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.css" />
 <style>
-  body {
-    background-color: #050505;
-    color: #e0e0e0;
-    font-family: 'Courier New', Courier, monospace;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
-  }
-
-  /* The Draggable Module Container */
-  .module-window {
-    background: #111;
-    border: 1px solid #333;
-    width: 350px;
-    box-shadow: 10px 10px 0px rgba(0, 255, 100, 0.1);
-    position: absolute;
-    /* Hardware snap effect */
-    transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-  }
-
-  /* The Header Bar */
-  .module-header {
-    background: #222;
-    padding: 10px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #00ff64;
-    cursor: grab;
-    display: flex;
-    justify-content: space-between;
-    letter-spacing: 2px;
-  }
-
-  .module-header:active {
-    cursor: grabbing;
-  }
-
-  /* The Tracklist */
-  .tracklist {
-    list-style: none;
-    padding: 20px;
-    margin: 0;
-  }
-
-  .track {
-    padding: 10px 0;
-    font-size: 14px;
-    cursor: pointer;
-    position: relative;
-    color: #888;
-    transition: color 0.1s;
-  }
-
-  /* The Hover Glitch Effect - Vicious, not viscous */
-  .track:hover {
-    color: #fff;
-    text-shadow: 
-      2px 0px 1px #ff003c, 
-      -2px 0px 1px #00eaff;
-    animation: glitch-anim 0.2s infinite;
-  }
-
-  @keyframes glitch-anim {
-    0% { transform: translate(0) }
-    20% { transform: translate(-2px, 1px) }
-    40% { transform: translate(-2px, -1px) }
-    60% { transform: translate(2px, 1px) }
-    80% { transform: translate(2px, -1px) }
-    100% { transform: translate(0) }
-  }
-
-  .status-dot {
-    height: 8px;
-    width: 8px;
-    background-color: #ff003c;
-    border-radius: 50%;
-    display: inline-block;
-    box-shadow: 0 0 10px #ff003c;
-  }
+ @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+ * { box-sizing: border-box; }
+ html, body { margin: 0; padding: 0; background: #000; color: #fff; font-family: 'Space Mono', monospace; overflow-x: hidden; }
+ a { color: #0ff; text-decoration: none; }
+ .wrapper { position: relative; z-index: 1; padding: 0 1rem; max-width: 1400px; margin: 0 auto; }
+ 
+ /* TITLE STACK */
+ .title-stack { padding-top: 10vh; text-align: center; font-size: 5vw; line-height: 1.2em; font-weight: 400; letter-spacing: -2px; }
+ .huge-now { font-size: 14vw; line-height: 0.9em; text-align: center; font-weight: 700; color: #000; -webkit-text-stroke: 1px #0ff; text-shadow: 0 0 15px rgba(0, 255, 255, 0.4); margin-bottom: 3rem; }
+ 
+ /* PRODUCT GRID - 1px neon strokes, tactical spread */
+ .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1px; background: #0ff; border: 1px solid #0ff; margin: 2rem 0; }
+ .product { background: #000; padding: 2rem 1rem; text-align: center; position: relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
+ .product h3 { margin-top: 0; font-size: 1.2rem; font-weight: 400; letter-spacing: 2px; color: #fff; }
+ .product img { max-width: 100%; height: auto; display: block; margin: 1rem auto; filter: grayscale(100%); transition: filter 0.3s ease; }
+ .product:hover img { filter: grayscale(0%); }
+ 
+ /* BUY BUTTON - Brutalist mechanical punch */
+ .buy { margin-top: 2rem; border: 1px solid #0ff; background: #000; color: #0ff; padding: 0.8rem 2.5rem; font-family: inherit; font-size: 1rem; cursor: pointer; transition: transform 0.05s ease, background 0.1s, color 0.1s; letter-spacing: 2px; outline: none; }
+ .buy:hover { background: rgba(0, 255, 255, 0.1); }
+ .buy:active { transform: translateY(4px); background: #0ff; color: #000; }
+ 
+ /* MARQUEE (Replaced Info Boxes) */
+ .marquee-container { width: 100vw; max-width: 100%; border-top: 1px solid #0ff; border-bottom: 1px solid #0ff; overflow: hidden; white-space: nowrap; padding: 1.5rem 0; margin: 4rem 0; background: #000; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; }
+ .marquee-scroll { display: inline-block; white-space: nowrap; animation: marquee 12s linear infinite; font-size: 1.2rem; font-weight: 700; color: #0f0; letter-spacing: 3px; }
+ @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+ 
+ /* ABOUT */
+ .about { margin: 2rem auto 6rem; text-align: center; font-size: 1rem; max-width: 700px; padding: 0 1rem; color: #888; line-height: 1.8; font-weight: 400; }
+ footer { text-align: center; color: #444; font-size: 0.8rem; padding-bottom: 3rem; letter-spacing: 1px; border-top: 1px solid #222; padding-top: 2rem; }
+ 
+ @media(max-width: 600px) {
+  .title-stack { font-size: 8vw; }
+  .huge-now { font-size: 20vw; }
+ }
 </style>
 </head>
 <body>
+<!-- Snipcart -->
+<div hidden id="snipcart" data-api-key="YOUR_PUBLIC_API_KEY" data-currency="JPY"></div>
+<script async src="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.js"></script>
+<audio id="bgTrack" src="https://0x.villain0.us/heavenearth%20(mixed).mp3" preload="auto"></audio>
 
-  <div class="module-window" id="tracklist-module">
-    <div class="module-header">
-      <span>0CROSS_OS // TRACKS</span>
-      <span class="status-dot"></span>
+<div class="wrapper">
+  <div class="title-stack">YOUR VILLAIN<br>ARC STARTS</div>
+  <div class="huge-now">NOW</div>
+
+  <section class="product-grid">
+    <div class="product" data-label="HAT">
+      <h3>TACOS</h3>
+      <img src="image.png" alt="Hat">
+      <button class="buy snipcart-add-item" data-item-id="tacos-hat" data-item-price="666" data-item-url="https://villain0.us" data-item-image="image.png" data-item-name="HAT">BUY</button>
     </div>
-    <ul class="tracklist">
-      <li class="track">01. HERE (DEMO)</li>
-      <li class="track">02. AURA (DEMO)</li>
-      <li class="track">03. DRACULA</li>
-      <li class="track">04. WAY PAST COOL</li>
-      <li class="track">05. BATTERY DRAINED</li>
-      <li class="track">06. MELT FOREVER</li>
-    </ul>
-  </div>
+    <div class="product" data-label="SHIRT">
+      <h3>VILLAIN</h3>
+      <img src="image2.png" alt="Shirt">
+      <button class="buy snipcart-add-item" data-item-id="villain-shirt" data-item-price="666" data-item-url="https://villain0.us" data-item-image="image2.png" data-item-name="SHIRT">BUY</button>
+    </div>
+    <div class="product" data-label="SHIRT">
+      <h3>RAPTURE</h3>
+      <img src="image3.png" alt="Rapture">
+      <button class="buy snipcart-add-item" data-item-id="rapture-shirt" data-item-price="666" data-item-url="https://villain0.us" data-item-image="image3.png" data-item-name="SHIRT">BUY</button>
+    </div>
+  </section>
+</div>
 
+<div class="marquee-container">
+  <div class="marquee-scroll">
+    <span>FREE STICKERS WITH EVERY ORDER // 🤘💀🤖🧷👾 JOIN THE VILLAIN CLUB 🦾🧨☠️🕸️👁️‍🗨️ // FREE STICKERS WITH EVERY ORDER // 🤘💀🤖🧷👾 JOIN THE VILLAIN CLUB 🦾🧨☠️🕸️👁️‍🗨️ // </span>
+  </div>
+</div>
+
+<div class="wrapper">
+  <div class="about">
+    Born in Tokyo & brewed in chaos. We fuse cyberpunk signal flow, street-zine aesthetics & glitch gospel into wearable rebellion. Every drop is a riot, every sticker a key. Plug in and stay villain.
+  </div>
+</div>
+<footer>&copy; 2026 Villainous Brand / Outer Heaven</footer>
+
+<script>
+// Smooth Audio Fade System & Hover Handlers
+const audio = document.getElementById('bgTrack');
+let fadeInterval;
+
+const fadeAudioIn = () => {
+  clearInterval(fadeInterval);
+  if (audio.paused) {
+    audio.volume = 0;
+    audio.play().catch(e => console.log('Audio playback requires user interaction first.'));
+  }
+  fadeInterval = setInterval(() => {
+    if (audio.volume < 0.9) {
+      audio.volume = Math.min(1, audio.volume + 0.1);
+    } else {
+      clearInterval(fadeInterval);
+    }
+  }, 50);
+};
+
+const fadeAudioOut = () => {
+  clearInterval(fadeInterval);
+  fadeInterval = setInterval(() => {
+    if (audio.volume > 0.1) {
+      audio.volume = Math.max(0, audio.volume - 0.1);
+    } else {
+      audio.pause();
+      clearInterval(fadeInterval);
+    }
+  }, 50);
+};
+
+const swapMap = { TACOS: 'HAT', VILLAIN: 'SHIRT', RAPTURE: 'SHIRT' };
+document.querySelectorAll('.product').forEach(card => {
+  const h3 = card.querySelector('h3');
+  const orig = h3.textContent;
+  
+  card.addEventListener('mouseenter', () => {
+    h3.textContent = swapMap[orig] || orig;
+    fadeAudioIn();
+  });
+  
+  card.addEventListener('mouseleave', () => {
+    h3.textContent = orig;
+    fadeAudioOut();
+  });
+});
+</script>
 </body>
 </html>

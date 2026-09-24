@@ -1,432 +1,308 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="vaporwave">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>0CROSS // ZERO CROSSING FANDOM</title>
+  <title>0CROSS // OFFICIAL EPK</title>
 
-  <!-- Fonts -->
+  <!-- Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <!-- Snipcart CSS -->
-  <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
   
-  <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Map & E-Commerce -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
   <style>
     :root {
-      --bg: #F9F8F6; --bg-alt: #FFFFFF; --ink: #111; --muted: #555;
-      --primary: #ff003c; --accent: #00eaff; --card-bg: rgba(255, 255, 255, 0.88);
-      --shadow: 10px 10px 0px rgba(255, 0, 60, 0.1); --border: #333;
-      --r: 0px; --content-max: 1200px; --scroll-offset: 70px;
-      --font-body: 'Space Mono', monospace; --font-heading: 'Orbitron', sans-serif;
-      --trail-base: rgba(255, 0, 60, 0.25); --trail-pulse: #ff003c; --mountain-wire: rgba(0, 234, 255, 0.1);
-    }
-    [data-theme="vaporwave"] {
-      --bg: #050505; --bg-alt: #111; --ink: #f0f0f5; --muted: #888;
-      --primary: #00ff64; --accent: #ff003c; --card-bg: #0a0a0a;
-      --shadow: 5px 5px 0px rgba(0, 255, 100, 0.2); --border: #333;
-      --trail-base: rgba(255, 0, 60, 0.25); --trail-pulse: #00ff64; --mountain-wire: rgba(255, 0, 60, 0.32);
+      --bg: #050505; 
+      --surface: #111111; 
+      --surface-hover: #1a1a1a;
+      --ink: #f4f4f5; 
+      --muted: #888888;
+      --primary: #ff003c; 
+      --border: #333333;
+      --content-max: 1200px; 
+      --nav-height: 80px;
+      --font-ui: 'Inter', sans-serif;
+      --font-mono: 'Space Mono', monospace;
     }
     
-    :root[lang="en"] .ja { display: none !important; }
-    :root[lang="ja"] .en { display: none !important; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: var(--font-body); color: var(--ink); background-color: var(--bg); line-height: 1.6; overflow-x: hidden; position: relative; }
+    body { font-family: var(--font-ui); color: var(--ink); background-color: var(--bg); line-height: 1.6; -webkit-font-smoothing: antialiased; }
     
-    [data-theme="vaporwave"] body, [data-theme="vaporwave"] p, [data-theme="vaporwave"] li, [data-theme="vaporwave"] span {
-      text-shadow: 0 0 2px rgba(0, 255, 100, 0.25);
-    }
-
-    h1, h2, h3, .headline { font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; text-shadow: 2px 2px 0px var(--accent); }
-    a { color: inherit; text-decoration: none; transition: 0.3s; }
-    img { max-width: 100%; display: block; filter: grayscale(100%); }
-    img:hover { filter: grayscale(0%); transition: 0.3s; }
-    [id] { scroll-margin-top: var(--scroll-offset); }
+    a { color: inherit; text-decoration: none; transition: 0.2s ease; }
+    img { max-width: 100%; display: block; filter: grayscale(100%); transition: 0.4s ease; }
+    img:hover { filter: grayscale(0%); }
     
-    /* BACKGROUND AUDIO WAVEFORM */
-    .trail-backdrop { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1; overflow: hidden; opacity: 0.9; }
-    .trail-svg { width: 100%; height: 100%; object-fit: cover; }
-    .trail-pulse { stroke-dasharray: 14 26; animation: climbAscent 2.4s linear infinite; }
-    @keyframes climbAscent { from { stroke-dashoffset: 80; } to { stroke-dashoffset: 0; } }
-
-    /* NAV */
-    nav { position: fixed; top: 0; left: 0; width: 100%; background: var(--bg-alt); border-bottom: 1px solid var(--border); z-index: 120; }
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--scroll-offset); padding: 0 clamp(1rem, 4vw, 2rem); }
-    .brand { display: flex; align-items: center; gap: 0.8rem; font-weight: 800; font-size: 1.2rem; cursor: pointer; font-family: var(--font-heading); color: var(--primary); }
-    .links { display: none; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; }
-    .links a { color: var(--muted); padding: 0 10px; }
-    .links a:hover { color: var(--accent); text-shadow: 2px 2px 0px rgba(255,0,60,0.5); }
-    .actions { display: none; gap: 1rem; align-items: center; }
-    @media (min-width: 900px) { .links { display: flex; position: absolute; left: 50%; transform: translateX(-50%); } .actions { display: flex; } #menuBtn { display: none; } }
-    .brand-text-match, #themeToggle { background: none; border: none; cursor: pointer; font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem; color: var(--primary); margin-right: 0.5rem; }
-    .hamburger { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
-    .hamburger span { display: block; width: 24px; height: 2px; background: var(--primary); }
-    .mobileMenu { position: fixed; top: var(--scroll-offset); left: 0; width: 100%; background: var(--bg-alt); padding: 2rem; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 1.5rem; text-align: center; transform: translateY(-100%); opacity: 0; visibility: hidden; transition: 0.3s; z-index: 100; }
-    nav.open .mobileMenu { transform: translateY(0); opacity: 1; visibility: visible; }
-
-    /* HERO */
-    header { margin-top: var(--scroll-offset); height: 75vh; position: relative; z-index: 2; border-bottom: 1px solid var(--border); }
-    .swiper { width: 100%; height: 100%; background: #000; }
-    .swiper-slide { display: flex; justify-content: center; align-items: center; background: radial-gradient(circle, var(--bg-alt) 0%, #000 100%); font-family: var(--font-heading); color: var(--primary); font-size: 3vw; letter-spacing: 5px; opacity: 0.2; }
-    .heroOverlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; z-index: 5; padding: 1rem; background: radial-gradient(circle, transparent 20%, var(--bg) 100%); }
-    .heroOverlay h1 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 1rem; color: var(--bg); -webkit-text-stroke: 2px var(--primary); text-shadow: 4px 4px 0px var(--accent); }
+    /* UTILITIES */
+    .container { max-width: var(--content-max); margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 3rem); }
+    .section { padding: 6rem 0; border-bottom: 1px solid var(--border); }
+    .section:last-of-type { border-bottom: none; }
+    .grid-2 { display: grid; grid-template-columns: 1fr; gap: 4rem; }
+    @media (min-width: 900px) { .grid-2 { grid-template-columns: 1fr 1fr; align-items: start; } }
     
-    /* SECTIONS */
-    .shell { max-width: var(--content-max); margin-inline: auto; padding-inline: clamp(1rem, 4vw, 2rem); }
-    .section { padding: 4rem 0; position: relative; z-index: 2; }
-    .split { display: grid; gap: 3rem; }
-    @media (min-width: 900px) { .split { grid-template-columns: 1fr 1fr; align-items: start; } }
-    .badge { display: inline-block; padding: 0.4rem 0.8rem; font-size: 0.75rem; font-weight: 800; background: var(--primary); color: #000; margin-bottom: 1rem; border: 1px solid var(--primary); }
-    .card { background: var(--card-bg); padding: clamp(1.5rem, 3vw, 2.5rem); box-shadow: var(--shadow); border: 1px solid var(--border); backdrop-filter: blur(14px); }
+    /* TYPOGRAPHY */
+    h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
+    h1 { font-size: clamp(3rem, 8vw, 6rem); line-height: 1; margin-bottom: 1rem; text-transform: uppercase; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); margin-bottom: 2rem; color: var(--ink); }
+    .mono { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; }
+    .subtitle { font-size: 1.2rem; color: var(--muted); max-width: 600px; margin-bottom: 2rem; }
+    .label { font-size: 0.75rem; color: var(--primary); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; display: block; }
     
     /* BUTTONS */
-    .btn, .btnWide, .btn-outline { font-family: var(--font-heading); background: var(--bg); color: var(--primary); border: 1px solid var(--primary); padding: 0.8rem 1.5rem; font-weight: 700; display: inline-block; cursor: pointer; text-transform: uppercase; box-shadow: 4px 4px 0px var(--primary); transition: 0.1s; outline: none; }
-    .btn:active, .btnWide:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--primary); }
-    .btnWide { width: 100%; text-align: center; }
-    .btn:hover { background: rgba(0, 255, 100, 0.1); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; background: var(--ink); color: var(--bg); padding: 1rem 2rem; font-weight: 600; font-family: var(--font-mono); text-transform: uppercase; cursor: pointer; transition: 0.2s ease; border: none; outline: none; }
+    .btn:hover { background: var(--primary); color: var(--ink); }
+    .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: transparent; }
 
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); z-index: 100; }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; height: var(--nav-height); }
+    .nav-links { display: none; gap: 2rem; font-size: 0.85rem; font-weight: 600; }
+    .nav-links a:hover { color: var(--primary); }
+    @media (min-width: 900px) { .nav-links { display: flex; } }
+
+    /* HERO */
+    header { padding-top: calc(var(--nav-height) + 6rem); padding-bottom: 6rem; border-bottom: 1px solid var(--border); }
+    
     /* =========================================
-       MODULES: TRACKLIST & LYRICS TERMINAL 
+       THE AUDIO ENGINE & TRACKLIST
        ========================================= */
-    .module-window {
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      width: 100%;
-      box-shadow: 10px 10px 0px rgba(0, 255, 100, 0.1);
-      position: relative;
-      transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-      display: flex;
-      flex-direction: column;
-    }
-    [data-theme="vaporwave"] .module-window { box-shadow: var(--shadow); }
-
-    .module-header {
-      background: var(--bg);
-      padding: 10px 15px;
-      font-size: 12px;
-      font-family: var(--font-heading);
-      font-weight: bold;
-      color: var(--primary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      letter-spacing: 2px;
-      border-bottom: 1px solid var(--border);
-    }
+    .player-container { background: var(--surface); border: 1px solid var(--border); padding: 2rem; margin-bottom: 3rem; display: flex; flex-direction: column; gap: 1.5rem; }
     
-    .status-dot { height: 8px; width: 8px; background-color: var(--accent); border-radius: 50%; display: inline-block; box-shadow: 0 0 10px var(--accent); }
-
-    #stop-audio { cursor: pointer; color: var(--accent); transition: 0.2s; }
-    #stop-audio:hover { color: #fff; text-shadow: 0 0 5px var(--accent); }
-
-    /* TRACKLIST */
-    .tracklist { list-style: none; padding: 20px; margin: 0; }
-    .track { padding: 12px 0; font-size: 14px; cursor: pointer; position: relative; color: var(--muted); transition: color 0.1s; border-bottom: 1px dashed var(--border); }
-    .track:last-child { border-bottom: none; }
-    .track.active { color: var(--primary); font-weight: bold; }
-    .track.active::before { content: '>'; position: absolute; left: -15px; color: var(--accent); }
-    .track.playing::after { content: ' [ ▶ ]'; color: var(--accent); animation: blink 1s step-end infinite; }
+    .player-controls { display: flex; align-items: center; gap: 1.5rem; }
+    .play-btn { background: var(--ink); color: var(--bg); border: none; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 1.2rem; transition: 0.2s; }
+    .play-btn:hover { transform: scale(1.05); background: var(--primary); color: var(--ink); }
     
-    .track:hover {
-      color: var(--ink);
-      text-shadow: 2px 0px 1px var(--accent), -2px 0px 1px var(--primary);
-      animation: glitch-anim 0.2s infinite;
-    }
-
-    @keyframes glitch-anim {
-      0% { transform: translate(0) }
-      20% { transform: translate(-2px, 1px) }
-      40% { transform: translate(-2px, -1px) }
-      60% { transform: translate(2px, 1px) }
-      80% { transform: translate(2px, -1px) }
-      100% { transform: translate(0) }
-    }
-
-    /* LYRICS TERMINAL */
-    .lyrics-container {
-      position: relative;
-      height: 450px;
-      background: #000;
-      overflow: hidden; 
-    }
+    .scrubber-container { flex-grow: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+    .time-display { display: flex; justify-content: space-between; font-size: 0.8rem; font-family: var(--font-mono); color: var(--muted); }
     
-    .crt-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-      z-index: 10;
-      background-size: 100% 2px, 3px 100%;
-      pointer-events: none;
-    }
+    .progress-bar { width: 100%; height: 4px; background: var(--border); cursor: pointer; position: relative; }
+    .progress-fill { height: 100%; background: var(--primary); width: 0%; pointer-events: none; }
+    
+    .volume-container { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
+    .volume-slider { width: 80px; cursor: pointer; accent-color: var(--primary); }
 
-    .lyrics-scroll {
-      height: 100%;
-      overflow-y: auto;
-      padding: 20px;
-      color: var(--primary);
-      font-size: 13px;
-      line-height: 1.8;
-      white-space: pre-wrap;
-      position: relative;
-      z-index: 1;
-    }
-
-    .lyrics-scroll::-webkit-scrollbar { width: 8px; }
-    .lyrics-scroll::-webkit-scrollbar-track { background: var(--bg-alt); border-left: 1px solid var(--border); }
-    .lyrics-scroll::-webkit-scrollbar-thumb { background: var(--primary); }
-
-    .cursor { animation: blink 1s step-end infinite; color: var(--accent); font-weight: bold; }
+    .tracklist { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .track { padding: 1rem; background: transparent; border: 1px solid transparent; font-family: var(--font-mono); font-size: 0.9rem; cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; color: var(--muted); }
+    .track:hover { background: var(--surface); color: var(--ink); }
+    .track.active { background: var(--surface); border: 1px solid var(--border); color: var(--ink); }
+    .track.playing .status { color: var(--primary); animation: blink 1s infinite; }
     @keyframes blink { 50% { opacity: 0; } }
 
-    /* MERCH GRID (VILLAINOUS ENGINE) */
-    .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 2rem 0; }
-    .product { background: var(--bg-alt); padding: 2rem 1rem; text-align: center; position: relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
-    .product h3 { margin-top: 0; font-size: 1.2rem; font-weight: 400; letter-spacing: 2px; color: var(--primary); }
-    .product-img-box { width: 100%; aspect-ratio: 1; background: #000; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); margin: 1rem 0; font-family: var(--font-heading); color: var(--muted); font-size: 1rem; letter-spacing: 2px; transition: 0.3s; }
-    .product:hover .product-img-box { border-color: var(--primary); color: var(--accent); text-shadow: 2px 2px 0px rgba(255, 0, 60, 0.5); box-shadow: inset 0 0 20px rgba(0, 255, 100, 0.1); }
+    /* LYRICS DISPLAY */
+    .lyrics-container { background: var(--surface); padding: 2.5rem; border: 1px solid var(--border); height: 600px; overflow-y: auto; font-family: var(--font-mono); font-size: 0.9rem; line-height: 2; color: var(--ink); white-space: pre-wrap; }
+    .lyrics-container::-webkit-scrollbar { width: 6px; }
+    .lyrics-container::-webkit-scrollbar-track { background: var(--bg); }
+    .lyrics-container::-webkit-scrollbar-thumb { background: var(--border); }
 
-    /* MARQUEE */
-    .marquee-container { width: 100vw; max-width: 100%; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; padding: 1.5rem 0; margin: 4rem 0; background: var(--bg-alt); position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; }
-    .marquee-scroll { display: inline-block; white-space: nowrap; animation: marquee 12s linear infinite; font-size: 1.2rem; font-weight: 700; font-family: var(--font-heading); color: var(--primary); letter-spacing: 3px; }
-    @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+    /* MERCH GRID */
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+    .product { border: 1px solid var(--border); padding: 2rem; text-align: center; background: var(--surface); transition: 0.2s; }
+    .product:hover { border-color: var(--primary); }
+    .product-img-box { width: 100%; aspect-ratio: 1; background: var(--bg); display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; font-family: var(--font-mono); color: var(--muted); }
+    
+    /* PRESS / EPK SECTION */
+    .epk-card { background: var(--surface); border: 1px solid var(--border); padding: 3rem; }
+    .dsp-links { display: flex; gap: 1rem; margin-top: 2rem; }
 
-    /* LAYOUT UTILS */
-    .eventGrid { display: grid; gap: 2rem; margin-top: 2rem; }
-    @media (min-width: 900px) { .eventGrid { grid-template-columns: 1fr 1fr; } }
-    #meetMap { width: 100%; height: 300px; border-radius: 0; z-index: 1; border: 1px solid var(--border); filter: grayscale(100%) invert(90%); }
-    [data-theme="vaporwave"] #meetMap { filter: invert(1) hue-rotate(180deg) contrast(1.2) grayscale(80%); }
+    /* MAP */
+    #meetMap { width: 100%; height: 400px; border: 1px solid var(--border); }
+
+    /* FOOTER */
+    footer { padding: 4rem 0; text-align: center; border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); }
 
   </style>
 </head>
-<body lang="en">
+<body>
 
-<!-- Snipcart Hidden Config -->
+<!-- Snipcart -->
 <div hidden id="snipcart" data-api-key="YOUR_PUBLIC_API_KEY" data-currency="JPY"></div>
 <script async src="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.js"></script>
 
-<!-- BACKGROUND AUDIO WAVEFORM -->
-<div class="trail-backdrop" aria-hidden="true">
-  <svg class="trail-svg" viewBox="0 0 1440 1000" preserveAspectRatio="xMidYMin slice" xmlns="http://www.w3.org/2000/svg">
-    <path d="M 0,300 L 1440,300 M 0,500 L 1440,500 M 0,700 L 1440,700" stroke="var(--mountain-wire)" stroke-width="1" stroke-dasharray="4 4" />
-    <path d="M 300,0 L 300,1000 M 720,0 L 720,1000 M 1140,0 L 1140,1000" stroke="var(--mountain-wire)" stroke-width="1" stroke-dasharray="4 4" />
-    <path d="M 0,900 L 150,850 L 200,900 L 300,600 L 400,800 L 500,400 L 600,750 L 720,200 L 800,800 L 900,500 L 1000,900 L 1100,700 L 1250,900 L 1440,900" fill="none" stroke="var(--trail-base)" stroke-width="4" stroke-linejoin="miter" />
-    <path d="M 0,900 L 150,850 L 200,900 L 300,600 L 400,800 L 500,400 L 600,750 L 720,200 L 800,800 L 900,500 L 1000,900 L 1100,700 L 1250,900 L 1440,900" fill="none" stroke="var(--trail-pulse)" stroke-width="3" stroke-linejoin="miter" class="trail-pulse" />
-  </svg>
-</div>
-
 <!-- NAV -->
-<nav id="siteNav">
-  <div class="nav-inner">
-    <div class="brand">0CROSS_OS</div>
-    <div class="links">
-      <a href="#terminal">Terminal</a>
-      <a href="#merch">Supply</a>
-      <a href="#archive">Archive</a>
-      <a href="#loadout">Loadout</a>
+<nav>
+  <div class="container nav-inner">
+    <a href="#" class="brand mono">0CROSS_OS</a>
+    <div class="nav-links">
+      <a href="#music" class="mono">Music</a>
+      <a href="#press" class="mono">Press Kit</a>
+      <a href="#live" class="mono">Live</a>
+      <a href="#merch" class="mono">Supply</a>
     </div>
-    <div class="actions">
-      <button id="langToggle" class="brand-text-match">JP</button>
-      <button id="themeToggle">⬛</button>
-      <button class="btn snipcart-checkout" style="padding: 0.5rem 1rem; font-size: 0.8rem;">CART (0)</button>
-    </div>
-    <button id="menuBtn" class="hamburger"><span></span><span></span><span></span></button>
-  </div>
-  <div id="mobileMenu" class="mobileMenu">
-    <a href="#terminal">Terminal</a>
-    <a href="#merch">Supply</a>
-    <a href="#archive">Archive</a>
-    <a href="#loadout">Loadout</a>
+    <button class="btn snipcart-checkout" style="padding: 0.5rem 1rem; font-size: 0.75rem;">CART</button>
   </div>
 </nav>
 
 <!-- HERO -->
-<header id="hero">
-  <div class="swiper">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">WAY PAST COOL</div>
-      <div class="swiper-slide">LISAN AL GAIB</div>
-    </div>
-    <div class="heroOverlay">
-      <h1><span class="en">VICIOUS.</span><span class="ja">悪意。</span><br><span class="en">NOT VISCOUS.</span><span class="ja">粘着質ではない。</span></h1>
-      <a href="#terminal" class="btn">Boot System</a>
-    </div>
+<header>
+  <div class="container">
+    <span class="label">Official Electronic Press Kit</span>
+    <h1>0CROSS</h1>
+    <p class="subtitle mono">Vicious. Not viscous. Shibuya-based rap and electronic architecture. Engineered from top to bottom.</p>
+    <a href="#music" class="btn">Listen Now</a>
   </div>
 </header>
 
-<!-- =============== TERMINAL MODULE =============== -->
-<section id="terminal" class="section shell split">
-  
-  <div class="module-window" id="tracklist-module">
-    <div class="module-header">
-      <span>0CROSS_OS // TRACKS</span>
-      <span class="status-dot"></span>
-    </div>
-    <ul class="tracklist" id="tracklist">
-      <li class="track active" data-track="0" data-src="HERE (DEMO).m4a">01. HERE (DEMO)</li>
-      <li class="track" data-track="1" data-src="AURA (DEMO).m4a">02. AURA (DEMO)</li>
-      <li class="track" data-track="2" data-src="DRACULA *.mp3">03. DRACULA</li>
-      <li class="track" data-track="3" data-src="WAY PAST COOL *.mp3">04. WAY PAST COOL</li>
-      <li class="track" data-track="4" data-src="BATTERY DRAINED *.mp3">05. BATTERY DRAINED</li>
-      <li class="track" data-track="5">06. MELT FOREVER [COMING SOON]</li>
-      <li class="track" data-track="6">07. AUDIENCE [COMING SOON]</li>
-      <li class="track" data-track="7">08. FREE PLANS [COMING SOON]</li>
-      <li class="track" data-track="8">09. TIMELINES [COMING SOON]</li>
-      <li class="track" data-track="9">10. DIAMOND [COMING SOON]</li>
-      <li class="track" data-track="10">11. LISAN AL GAIB (BONUS) [COMING SOON]</li>
-    </ul>
-  </div>
-
-  <div class="module-window" id="lyrics-module">
-    <div class="module-header">
-      <span id="lyric-header">DECRYPTING // SYSTEM_READY.TXT</span>
+<!-- =============== MUSIC & LYRICS =============== -->
+<section id="music" class="section">
+  <div class="container">
+    <span class="label">The Archive</span>
+    <h2>Selected Works</h2>
+    
+    <div class="grid-2">
+      <!-- Left: Player & Tracklist -->
       <div>
-        <span id="stop-audio" title="Stop Playback">[ ◼ ]</span>
-      </div>
-    </div>
-    <div class="lyrics-container">
-      <div class="crt-overlay"></div>
-      <div class="lyrics-scroll" id="lyrics-display">
-        <!-- JS Types Here -->
-      </div>
-    </div>
-  </div>
+        <!-- Audio Engine -->
+        <div class="player-container">
+          <div class="player-controls">
+            <button id="playBtn" class="play-btn">▶</button>
+            <div class="scrubber-container">
+              <div class="time-display">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+              </div>
+              <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+            </div>
+          </div>
+          <div class="volume-container">
+            <span>VOL</span>
+            <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="0.8">
+          </div>
+        </div>
 
-</section>
-
-<!-- MARQUEE TRANSITION -->
-<div class="marquee-container">
-  <div class="marquee-scroll">
-    <span>FREE STICKERS WITH EVERY ORDER // 🤘💀🤖🧷👾 JOIN THE VILLAIN CLUB 🦾🧨☠️🕸️👁️‍🗨️ // FREE STICKERS WITH EVERY ORDER // 🤘💀🤖🧷👾 JOIN THE VILLAIN CLUB 🦾🧨☠️🕸️👁️‍🗨️ // </span>
-  </div>
-</div>
-
-<!-- =============== MERCH (VILLAINOUS INTEGRATION) =============== -->
-<section id="merch" class="section shell card">
-  <span class="badge">Supply Drop</span>
-  <h2 style="font-size: 1.5rem; color: var(--primary);">Official Gear</h2>
-  <p class="subtle">Villainous Brand collaboration. Wearable rebellion.</p>
-  
-  <div class="product-grid">
-    
-    <div class="product">
-      <h3>VILLAIN TEE</h3>
-      <div class="product-img-box">IMG_LOAD_ERROR</div>
-      <button class="btnWide snipcart-add-item" data-item-id="villain-tee" data-item-price="6666" data-item-url="https://villain0.us" data-item-name="VILLAIN TEE">¥6666 // BUY</button>
-    </div>
-    
-    <div class="product">
-      <h3>DRACULA CASSETTE</h3>
-      <div class="product-img-box">IMG_LOAD_ERROR</div>
-      <button class="btnWide snipcart-add-item" data-item-id="dracula-tape" data-item-price="1500" data-item-url="https://villain0.us" data-item-name="DRACULA CASSETTE">¥1500 // BUY</button>
-    </div>
-    
-    <div class="product">
-      <h3>RAPTURE CAP</h3>
-      <div class="product-img-box">IMG_LOAD_ERROR</div>
-      <button class="btnWide snipcart-add-item" data-item-id="rapture-cap" data-item-price="3500" data-item-url="https://villain0.us" data-item-name="RAPTURE CAP">¥3500 // BUY</button>
-    </div>
-
-  </div>
-</section>
-
-<!-- =============== ARCHIVE =============== -->
-<section id="archive" class="section shell card" style="margin-top: 4rem;">
-  <span class="badge">Live Archive</span>
-  <h2 style="font-size: 1.5rem; color: var(--primary);">The Baia Tokyo Set</h2>
-  <p class="subtle">Archive: September 19, 2026</p>
-  
-  <div class="eventGrid">
-    <div class="eventCol">
-      <p style="margin-bottom: 1rem;">A relentless live music performance at Baia Tokyo, featuring deep cuts from the 0cross catalog. From coordinating door-splits to pushing the sound system to its absolute limit, the September 19th show solidified the Shibuya presence.</p>
-      <ul style="list-style: none; padding-left: 0; margin-top: 2rem;">
-        <li style="margin-bottom: 0.5rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Venue:</strong> Baia Tokyo, Shibuya</li>
-        <li style="margin-bottom: 0.5rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Tracks:</strong> Dracula, Battery Drained, Free Plans</li>
-      </ul>
-    </div>
-    <div class="eventCol">
-      <div id="meetMap"></div>
-      <a class="btn btnWide" style="margin-top: 1rem;" href="https://www.google.com/maps/search/?api=1&query=Baia+Tokyo+Shibuya" target="_blank">Boot Map Coord</a>
-    </div>
-  </div>
-</section>
-
-<!-- =============== LOADOUT =============== -->
-<section id="loadout" class="section shell">
-  <h2 class="headline" style="text-align: center;">Studio Loadout</h2>
-  <div style="text-align: center; margin-bottom: 3rem;"><p class="subtle">The hardware and software powering the noise.</p></div>
-  <div class="card">
-    <span class="badge">Tech Specs</span>
-    <div class="eventGrid" style="margin-top: 0;">
-      <div class="eventCol">
-        <ul style="list-style: none; padding: 0;">
-          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Primary Sampler:</strong> Teenage Engineering EP-133 K.O. II for chopping loops and drum sequences.</li>
-          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Interface:</strong> Solid State Logic 2 MKII processing the master inputs.</li>
-          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Pedal:</strong> HeadRush VX5 utilized for vocal effects and live looping.</li>
+        <!-- Tracklist -->
+        <ul class="tracklist" id="tracklist">
+          <li class="track active" data-track="0" data-src="HERE (DEMO).m4a">
+            <span>01. HERE (DEMO)</span><span class="status"></span>
+          </li>
+          <li class="track" data-track="1" data-src="AURA (DEMO).m4a">
+            <span>02. AURA (DEMO)</span><span class="status"></span>
+          </li>
+          <li class="track" data-track="2" data-src="DRACULA *.mp3">
+            <span>03. DRACULA</span><span class="status"></span>
+          </li>
+          <li class="track" data-track="3" data-src="WAY PAST COOL *.mp3">
+            <span>04. WAY PAST COOL</span><span class="status"></span>
+          </li>
+          <li class="track" data-track="4" data-src="BATTERY DRAINED *.mp3">
+            <span>05. BATTERY DRAINED</span><span class="status"></span>
+          </li>
         </ul>
       </div>
-      <div class="eventCol">
-        <ul style="list-style: none; padding: 0;">
-          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>DAWs:</strong> Logic Pro and FL Studio for composition and digital audio editing.</li>
-          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Mobile Comm:</strong> Samsung Galaxy Z Fold 8 & iPhone Air with Smart Glasses.</li>
-          <li style="margin-bottom: 1rem;"><span style="color: var(--accent); font-weight: bold;">></span> <strong>Handhelds:</strong> Steam Deck OLED, GPD Win 4, Retroid Pocket Nova for emulation downtime.</li>
+
+      <!-- Right: Lyrics -->
+      <div>
+        <div class="lyrics-container" id="lyrics-display">
+          <!-- Instant Lyrics Injection -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== PRESS KIT / EPK =============== -->
+<section id="press" class="section">
+  <div class="container">
+    <div class="grid-2">
+      <div>
+        <span class="label">Press & Contact</span>
+        <h2>The Lore</h2>
+        <p style="margin-bottom: 1.5rem; color: var(--muted);">Originating from the Shibuya underground, 0CROSS is an uncompromising audio project driven by a completely hands-on approach. The operation runs top to bottom, covering beat production, lyric writing, and live show logistics.</p>
+        <p style="margin-bottom: 2rem; color: var(--muted);">Powered by modern hardware including the Teenage Engineering EP-133 K.O. II and the Solid State Logic 2 MKII, the sound is a collision of glitch aesthetics, precision lyricism, and heavy bass lines.</p>
+        
+        <div class="dsp-links">
+          <a href="#" class="btn btn-outline">Spotify</a>
+          <a href="#" class="btn btn-outline">Apple Music</a>
+        </div>
+      </div>
+      
+      <div class="epk-card">
+        <h3 class="mono" style="margin-bottom: 1rem;">Booking & Assets</h3>
+        <p style="margin-bottom: 2rem; color: var(--muted);">For booking inquiries, collaborations, or press requests, please use the contact information below. High-resolution press photos and vector logos are available in the media kit.</p>
+        <a href="#" class="btn" style="width: 100%; margin-bottom: 1rem;">Download Press Kit (.ZIP)</a>
+        <a href="mailto:booking@villain0.us" class="btn btn-outline" style="width: 100%;">booking@villain0.us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== LIVE ARCHIVE =============== -->
+<section id="live" class="section">
+  <div class="container">
+    <span class="label">Live Setup</span>
+    <h2>Baia Tokyo Set</h2>
+    
+    <div class="grid-2">
+      <div>
+        <p style="margin-bottom: 2rem; color: var(--muted);">A relentless live music performance at Baia Tokyo, featuring deep cuts from the 0cross catalog. From coordinating door-splits to pushing the sound system to its absolute limit, the September 19th, 2026 show solidified the Shibuya presence.</p>
+        
+        <h3 class="mono" style="font-size: 1rem; margin-bottom: 1rem;">Hardware Loadout</h3>
+        <ul style="list-style: none; color: var(--muted); font-family: var(--font-mono); font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <li>> Teenage Engineering EP-133 K.O. II</li>
+          <li>> Solid State Logic 2 MKII</li>
+          <li>> HeadRush VX5</li>
+          <li>> Logic Pro / FL Studio</li>
         </ul>
+      </div>
+      <div>
+        <div id="meetMap"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== MERCH / SUPPLY =============== -->
+<section id="merch" class="section">
+  <div class="container">
+    <span class="label">Supply Drop</span>
+    <h2>Official Gear</h2>
+    
+    <div class="product-grid">
+      <div class="product">
+        <div class="product-img-box">IMAGE DATA</div>
+        <h3 class="mono" style="margin-bottom: 1.5rem; font-size: 1rem;">VILLAIN TEE</h3>
+        <button class="btn snipcart-add-item" style="width: 100%;" data-item-id="villain-tee" data-item-price="6666" data-item-url="https://villain0.us" data-item-name="VILLAIN TEE">¥6666 // BUY</button>
+      </div>
+      
+      <div class="product">
+        <div class="product-img-box">IMAGE DATA</div>
+        <h3 class="mono" style="margin-bottom: 1.5rem; font-size: 1rem;">DRACULA CASSETTE</h3>
+        <button class="btn snipcart-add-item" style="width: 100%;" data-item-id="dracula-tape" data-item-price="1500" data-item-url="https://villain0.us" data-item-name="DRACULA CASSETTE">¥1500 // BUY</button>
+      </div>
+      
+      <div class="product">
+        <div class="product-img-box">IMAGE DATA</div>
+        <h3 class="mono" style="margin-bottom: 1.5rem; font-size: 1rem;">RAPTURE CAP</h3>
+        <button class="btn snipcart-add-item" style="width: 100%;" data-item-id="rapture-cap" data-item-price="3500" data-item-url="https://villain0.us" data-item-name="RAPTURE CAP">¥3500 // BUY</button>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer style="margin-top: 4rem; text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-family: var(--font-heading); color: var(--primary);">
-  <p>0CROSS_OS / TOKYO UNDERGROUND 2026</p>
+<footer>
+  <div class="container">
+    <p>0CROSS_OS / SHIBUYA, TOKYO / 2026</p>
+  </div>
 </footer>
 
 <script>
-  // Theme Toggle
-  const themeToggle = document.getElementById('themeToggle');
-  function toggleTheme() {
-    if (document.documentElement.getAttribute('data-theme') === 'vaporwave') {
-      document.documentElement.removeAttribute('data-theme');
-      themeToggle.textContent = '⬜';
-    } else {
-      document.documentElement.setAttribute('data-theme', 'vaporwave');
-      themeToggle.textContent = '⬛';
-    }
-  }
-  themeToggle.addEventListener('click', toggleTheme);
-
-  // Nav Mobile menu
-  document.getElementById('menuBtn').addEventListener('click', () => document.getElementById('siteNav').classList.toggle('open'));
-
-  // Swiper Init
-  new Swiper('.swiper', { loop: true, autoplay: { delay: 4000, disableOnInteraction: false }, effect: 'fade' });
-
-  // Map Init
-  const mapCenter = [35.6580, 139.7016]; 
-  const map = L.map('meetMap', { scrollWheelZoom: false }).setView(mapCenter, 15);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM' }).addTo(map);
-  L.marker(mapCenter).addTo(map).bindPopup('Baia Tokyo, Shibuya');
-
-  // Audio Engine
-  const player = new Audio();
-  const stopBtn = document.getElementById('stop-audio');
-  
-  stopBtn.addEventListener('click', () => {
-    player.pause();
-    player.currentTime = 0;
-    document.querySelectorAll('.track').forEach(t => t.classList.remove('playing'));
+  // Map Init (Clean CartoDB Dark Tiles)
+  document.addEventListener("DOMContentLoaded", () => {
+    const mapCenter = [35.6580, 139.7016]; 
+    const map = L.map('meetMap', { scrollWheelZoom: false }).setView(mapCenter, 15);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM' }).addTo(map);
+    L.marker(mapCenter).addTo(map).bindPopup('Baia Tokyo, Shibuya');
   });
 
-  player.addEventListener('ended', () => {
-    document.querySelectorAll('.track').forEach(t => t.classList.remove('playing'));
-  });
-
-  // Lyrics Database
+  // Database
   const lyricsDB = [
     `Rock man\nGot no cash\nNot so fast\nGot no plans\nPlot it to last\n\nCount up the racks\nThat's that\nLotta tasks\nBrought it to max\nLotta facts don’t matter\n\nBounce yo ass\nPound yo glass\nShot a glance\nAt my hag\nI’m enhanced\n\nYou up late\nYou a fan\nWhat they say\nOn the gram\nNo I don't think you’d fathom\nNo not after you not bad\nWhere you at?\n\nDoubt you’d last, doubt you’d last\nRock man\nGot no cash\nWhere you at?\nAre you with her? Or you slither?\n\nGotta measure all my bands\nKinda glad she got no past\nAnd no rhythm, jus a figment\n\nBounce your ass\nWhen you sitting on the glass\nGirl you know I won’t last\nSolitaire\nOn my half\nWith a gram\nYou enhanced\nYour stamina\nGirl you know I’m entranced`,
     
@@ -436,76 +312,124 @@
     
     `Y’all can die mad, I was born to be here\nWrote all that up on a four-speed\nVader go Sith, use the force to bleed em\nGhost of this bitch still torment me\nYou seen I’m up next, so of course you diva\nWe just sold out all the floor seats\nHatchet Man axe it, that’s actually cleaver\nTold that girl, dammit, don't force me\n\nThought of these goals when I heard I'm in it\nGalaxy Fold, never phone in, we been here\nSomeone foretold that I already win it\nSomeone to hold, baby, Hare the Krishna\nAlready Christian\nOuter the space, how we count down the system\nOkay, I got it now call it autistic\nAutograph sign-in, they signing the missile\n\nUh, whew!\nThis is my life, whew!\nAlready told you I don’t take advice\nDiss you my right, dome you I don't need a high price\nLate for the fight\nTaking a vote with the highlights\nName of the heist\nLive in the moment that I like\n\nWay past cool, woo!\nThat’s what I do, yeah\nThat's how we move\nRan in the coop\nSee how the past move (Whoa)\nWay too slow, pace too slow\nPay me like Kuzco\nSecret Wars, that Endgame\nAnthony Russo`,
     
-    `Get it need it hey\nRan up the beach waves\nLaughin at me, fake\n(Bitch) I don’t need saving\n\nPlan no B, A\nRap a three way\nThat’s my cheap rate\nMad at me\nBattery drained\n\nPlant a disease\nPlanet to free\nDammit to me too backhanded to see, yuh yuh\nProbably un-add yourself\nCaught you red handed a plant of the seed, laid\n\nAll yo bad habits don’t matter to me\nFree all my bad bitches land of the free\n\nYou ain’t have to meet Ye\nYou just have to be Ye\n\nGranite where my seat lay\nMy dawg said you ain’t no freak\nLets see, let’s see where your teeth lay\nPlatinum in a week\nLaughing after words you speak late\nHad bitch after me\nI think all them bastards need to pay\nBlast em in the street`,
-    
-    `Melt forever baby\nMelt forever in my arms\nBe the devil tamer\nEase the trembles in my heart\n\nWhat do I do?\nCross off another one\nGod bless him doing a stupid phenomenon\nWhat's left to ruin you? Causing a problem\nEarth to Brent, call cops at Comic Con\nStop and unsend the text\nPromise a homicide bet\nHominid red, vamanous\nFederal expressing another one hundred over\nSaid I'm the best dressed\nHow would they know?\n\nDeath threats, let me collect\nDead text stuck in the drafts\nI'm finna break down to brass tax\nI ain't gon' fish down no tax brackets\nI axe that lil bitch for cash back\nThey been ignoring the facts bad\nI'm finna go ahead and pass back\nShe said she go with it fast, fast\n\nMelt forever baby\nMelt forever in my arms\nBe the devil tamer\nEase the trembles in my heart`,
-    
-    `Thats not your audience girl\nTry not to promise shit girl\nGive em Omari\nHari the kari\nEnd up with all of this girl\n\nI think I’m falling baby girl\nCould have kept all this safe girl\nWhat did you call me?\nStick with the progress\nFeminine imminent, sorry\n\nI told her, aw this sick world\nThat’s not your audience girl\nKept her from falling deeper\nI tend to polish it girl\n\nIm in your Audi\nSick of the sorries\nNicholas slippin then saving it for me\nIn a precarious world\nSick with the sonnets\nDid it for audience\n\nWe in Shibuya it ain’t nothing new to ya, ya\nPass that charcuterie fill that jacuzzi up\nBitches tattoo me they’d probably shoot me ya\nFooly the cooly my life is a movie ya`,
-    
-    `Why would you say that to me? Man\nMight go and find what I need, can\nWhy wont you say what you mean\nI got everything handed to me\n\nBut the truth\nI won’t side with you\nI been tired of rules\nFates, that you make\nMan do that 'fore its too late\n\nWobble loose, this my Waterloo\nI won’t cry just hide the truth\nMan If I were you, why would I decide to lose?\n\nFuck your video game\nFuck your console\nFuck what Hideo say\nFuck your household\n\nWe got free plans\nWhat it do what it do?\nThey got three paths\nOne for me two for you\nWoo woo!`,
-    
-    `Timelines\nWhy does the time lie\nShut me up eyes wide\nNine lives\nProbably do cardio time flies\nLifeline\nI wasnt part of yo fine line\nDont know da code to yo wifi\nBright eyes\nGave u the time of ur life life\nWhy you been typing those white lies\nNice try\nHate that I might be more Christlike\nShine shine\n\nTime moving on but I slow it\nEvery memory stolen\nAll eyes on me when I’m zonin\nMovin the posts from the goalie\n\nShe laugh like she think know me huh\nHoldin my hand losing focus huh\nChasin her love like it owe me\nBuyin in high and then sold it low\n\nI cannot tell if it’s heaven\nOr all the lights just playin with me\nYou always change like the weather\nFarenheit babe stay here with me`,
-    
-    `Fuckin’ hope you happy\nShe condone you rappin’\nIf they don’t want smoke, they won’t know what happened\nIn a cult, so savage\nOut in Seoul, ghost habit\nWhen he float, coast to coast, up the toast and down it\n\nSaid the most (Yeah)\nRun it up the fold (Yeah)\nUnder where mold is\nLike my daddy told me\nOkay\n\nNow we gettin’ cozy, yeah\nBut I set it cold (Cold)\nNever let a coat, yeah\nNever need a coat\n\nI’ma do my own thang\nI am an adult (Yeah)\nSpittin’ with the dope slang\nWrote that from the soul, yeah (Oh yeah)\nOh yeah, we did gold slang\nYeah, we had it gross\nYeah\nOverdid the whole thing\nOwn it, here we go`,
-    
-    `Can’t see you (Got what I need from you)\nCan’t breathe\nCant please you (Not like you need me to)\nCant freak\n\nThat’s lethal (Now that I think of you)\nLast week\nAct decent\nCant leave\n\nI free you, (Know you got things to do)\n\nShe gotta eat I feast (Sheesh)\nGot me high 3 at least\nCross eye Nissan leaf\nLisan al-Gaib\nShit goes out I sleep\nFreaks out crease on crease\nLeave out all police\nCop a couple cars they lease\nCrosser hold it down for weeks\nRead back how that seem\nLisan Al Gaib\nI don’t gotta pay thou fees\nU aint finna pout just leave\nYea I bought a house y’all lease\nShe aint gettin how that reads\nHe dont got a crown just heat`
+    `Get it need it hey\nRan up the beach waves\nLaughin at me, fake\n(Bitch) I don’t need saving\n\nPlan no B, A\nRap a three way\nThat’s my cheap rate\nMad at me\nBattery drained\n\nPlant a disease\nPlanet to free\nDammit to me too backhanded to see, yuh yuh\nProbably un-add yourself\nCaught you red handed a plant of the seed, laid\n\nAll yo bad habits don’t matter to me\nFree all my bad bitches land of the free\n\nYou ain’t have to meet Ye\nYou just have to be Ye\n\nGranite where my seat lay\nMy dawg said you ain’t no freak\nLets see, let’s see where your teeth lay\nPlatinum in a week\nLaughing after words you speak late\nHad bitch after me\nI think all them bastards need to pay\nBlast em in the street`
   ];
 
-  // Module Interaction Logic & Real Typewriter Effect
+  // Elite Audio Engine
+  const audio = new Audio();
+  const playBtn = document.getElementById('playBtn');
+  const progressBar = document.getElementById('progressBar');
+  const progressFill = document.getElementById('progressFill');
+  const currentTimeEl = document.getElementById('currentTime');
+  const durationEl = document.getElementById('duration');
+  const volumeSlider = document.getElementById('volumeSlider');
+  
   const tracks = document.querySelectorAll('.track');
   const display = document.getElementById('lyrics-display');
-  const lyricHeader = document.getElementById('lyric-header');
-  let typeInterval;
+  
+  let currentActiveTrack = null;
 
-  function typeWriter(text, element, speed = 10) {
-    element.innerHTML = '<span id="type-text"></span><span class="cursor">_</span>';
-    const textSpan = document.getElementById('type-text');
-    let i = 0;
-    clearInterval(typeInterval);
-    typeInterval = setInterval(() => {
-      if (i < text.length) {
-        textSpan.innerHTML += text.charAt(i);
-        i++;
-      } else {
-        clearInterval(typeInterval);
-      }
-    }, speed);
-  }
+  // Format time util
+  const formatTime = (time) => {
+    if (isNaN(time)) return "0:00";
+    const mins = Math.floor(time / 60);
+    const secs = Math.floor(time % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
 
-  // Load initial prompt
-  typeWriter("> WAITING FOR TRACK SELECTION...", display);
+  // Load Initial Lyrics INSTANTLY
+  display.textContent = lyricsDB[0];
 
+  // Track Selection
   tracks.forEach(track => {
     track.addEventListener('click', function() {
-      // Manage Active State
-      tracks.forEach(t => t.classList.remove('active', 'playing'));
+      // Manage CSS state
+      tracks.forEach(t => {
+        t.classList.remove('active', 'playing');
+        t.querySelector('.status').textContent = '';
+      });
+      
       this.classList.add('active');
-      
       const trackId = this.getAttribute('data-track');
-      const audioSrc = this.getAttribute('data-src');
+      const src = this.getAttribute('data-src');
       
-      // Clean up track name for the terminal header
-      const trackName = this.innerText
-        .replace(/[0-9.]/g, '')
-        .replace('[COMING SOON]', '')
-        .trim()
-        .replace(/ /g, '_')
-        .toUpperCase();
-      
-      lyricHeader.innerText = `DECRYPTING // ${trackName}.TXT`;
-      
-      // Play Audio or Throw Terminal Error
-      if (audioSrc) {
-        player.src = audioSrc;
-        player.play().catch(e => console.log('Audio playback requires user interaction.'));
-        this.classList.add('playing');
-        typeWriter(lyricsDB[trackId], display);
+      // Instant Lyrics Loading
+      display.textContent = lyricsDB[trackId];
+      display.scrollTop = 0;
+
+      // Audio Logic
+      if (currentActiveTrack !== this) {
+        audio.src = src;
+        audio.play().then(() => {
+          this.classList.add('playing');
+          playBtn.textContent = '⏸';
+        }).catch(() => {
+          playBtn.textContent = '▶';
+        });
+        currentActiveTrack = this;
       } else {
-        player.pause();
-        typeWriter(`[ERROR: AUDIO_FILE_NOT_FOUND]\n> TRACK "${trackName}" IS CURRENTLY UNAVAILABLE.\n> STATUS: COMING SOON...`, display);
+        // Toggle play/pause if clicking the same track
+        if (audio.paused) {
+          audio.play();
+          this.classList.add('playing');
+          playBtn.textContent = '⏸';
+        } else {
+          audio.pause();
+          playBtn.textContent = '▶';
+        }
       }
     });
   });
+
+  // Global Play/Pause Button
+  playBtn.addEventListener('click', () => {
+    if (!audio.src && currentActiveTrack === null) {
+      // Default to first track if nothing selected
+      tracks[0].click();
+      return;
+    }
+    if (audio.paused) {
+      audio.play();
+      playBtn.textContent = '⏸';
+      if(currentActiveTrack) currentActiveTrack.classList.add('playing');
+    } else {
+      audio.pause();
+      playBtn.textContent = '▶';
+      if(currentActiveTrack) currentActiveTrack.classList.remove('playing');
+    }
+  });
+
+  // Audio Event Listeners
+  audio.addEventListener('loadedmetadata', () => {
+    durationEl.textContent = formatTime(audio.duration);
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    currentTimeEl.textContent = formatTime(audio.currentTime);
+    const progressPercent = (audio.currentTime / audio.duration) * 100;
+    progressFill.style.width = `${progressPercent}%`;
+  });
+
+  audio.addEventListener('ended', () => {
+    playBtn.textContent = '▶';
+    if(currentActiveTrack) currentActiveTrack.classList.remove('playing');
+    progressFill.style.width = `0%`;
+    currentTimeEl.textContent = "0:00";
+  });
+
+  // Scrubber Click Logic
+  progressBar.addEventListener('click', (e) => {
+    if (!audio.src) return;
+    const rect = progressBar.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pos * audio.duration;
+  });
+
+  // Volume Logic
+  volumeSlider.addEventListener('input', (e) => {
+    audio.volume = e.target.value;
+  });
+
 </script>
 </body>
 </html>
